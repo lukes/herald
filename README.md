@@ -25,25 +25,37 @@ Watch for tweets containing "soundofmusic":
 
     Herald.watch do
       check :twitter
-      for :soundofmusic
+      for "soundofmusic"
     end
     
 Or an RSS feed:
 
     Herald.watch do
       check :rss, :from => "http://example.com/.rss"
-      for :soundofmusic
+      for "soundofmusic"
     end
   
-### Watching multiple sources
+### Watching multiple sources, or for multiple keywords
 
 Watching two RSS feeds and Twitter for two keywords
 
     Herald.watch do
-      check :rss, :from => ["http://example.com/one.rss", "http://example.com/two.rss"]
+      check :rss, :from => ["http://example.com/one.rss", "http://example.com/two.rss"] {
       check :twitter
-      for [:sound, :music]
+      for ["jp_earthquake", "quake"]
     end
+
+Or, if sources should have different keywords
+
+    Herald.watch do
+      check :rss, :from => ["http://example.com/one.rss", "http://example.com/two.rss"] {
+        for ["christchurch", "earthquake"]
+      }
+      check :twitter {
+        for ["#eqnz", "#chch", "#quake"] 
+      }
+    end
+    
 
 ### Callbacks
 
