@@ -62,9 +62,9 @@ Or, if sources should have different keywords
 If you'd like to do something else each time a keyword appears, pass a callback
 
     Herald.watch_twitter do
-      for :soundofmusic
+      for "revolution"
       action do
-        `say "Hello!"`
+        `say "Viva!"`
       end
       growl :off
     end
@@ -84,17 +84,9 @@ To set a different sleep time:
 ### Shorthand Methods
 
     # Herald.watch_twitter
-    Herald.watch_twitter { hashtag :soundofmusic }
+    Herald.watch_twitter { for "#herald" }
 
     # Herald.watch_rss
-    Herald.watch_rss { :from => "http://example.com/.rss", for :soundofmusic }
-
-### Hashtags
-
-    # Only watch for hashtags
-    Herald.watch do
-      check :twitter
-      for :soundofmusic, :hashtag => true
-    end
+    Herald.watch_rss { :from => "http://example.com/.rss", for "herald" }
 
   
