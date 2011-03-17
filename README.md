@@ -3,7 +3,7 @@ Herald
 
 Herald is a simple Growl notifier for Twitter, RSS, or email. 
 
-Pass Herald some keywords and sources, and you'll be notified when your keywords appear in the sources.
+Pass Herald some keywords and sources, and you'll be notified when your keywords appear.
 
 Installation
 ------------
@@ -35,8 +35,9 @@ Or an RSS feed:
       for :soundofmusic
     end
   
-Watching multiple sources
--------------------------
+### Watching multiple sources
+
+Watching two RSS feeds and Twitter for two keywords
 
     Herald.watch do
       check :rss, :from => ["http://example.com/one.rss", "http://example.com/two.rss"]
@@ -44,42 +45,39 @@ Watching multiple sources
       for [:sound, :music]
     end
 
-Timer
------
+### Callbacks
 
-By default Herald will sleep for 1 minute after checking each of the sources independently. 
+If you'd like to do something else each time a keyword appears, pass a callback
+
+    Herald.watch_twitter do
+      for :soundofmusic
+      action do
+        `say "Hello!"`
+      end
+      growl :off
+    end
+    
+
+### Timer
+
+By default Herald will sleep for 2 minutes after checking each of the sources independently. 
 To set a different sleep time:
 
     Herald.watch do
       check :twitter
       for :soundofmusic
-      every 300 # (seconds)
+      timer 60 # (seconds)
     end
-
-Callbacks
----------
-
-If you'd like to do something else each time a keyword appears, pass a callback
-
-    Herald.watch_twitter do
-      growl :off
-      for :soundofmusic
-      action do
-        `say "Hello!"`
-      end
-    end
-    
-Shorthand Methods
------------------
+        
+### Shorthand Methods
 
     # Herald.watch_twitter
     Herald.watch_twitter { hashtag :soundofmusic }
 
     # Herald.watch_rss
-    Herald.watch_rss { :from => ["http://example.com/.rss"], for :soundofmusic }
+    Herald.watch_rss { :from => "http://example.com/.rss", for :soundofmusic }
 
-Hashtags
---------
+### Hashtags
 
     # Only watch for hashtags
     Herald.watch do
