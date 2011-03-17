@@ -42,7 +42,7 @@ Watching two RSS feeds and Twitter for two keywords
     Herald.watch do
       check :rss, :from => ["http://example.com/one.rss", "http://example.com/two.rss"] {
       check :twitter
-      for ["jp_earthquake", "quake"]
+      for ["christchurch", "earthquake"]
     end
 
 Or, if sources should have different keywords
@@ -63,10 +63,10 @@ If you'd like to do something else each time a keyword appears, pass a callback
 
     Herald.watch_twitter do
       for "revolution"
+      growl :off
       action do
         `say "Viva!"`
       end
-      growl :off
     end
     
 
@@ -78,7 +78,7 @@ To set a different sleep time:
     Herald.watch do
       check :twitter
       for :soundofmusic
-      timer 60 # (seconds)
+      every 60 => "seconds"
     end
         
 ### Shorthand Methods
