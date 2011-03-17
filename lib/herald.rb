@@ -6,9 +6,9 @@ require 'ruby-growl'
 
 class Herald
 
- def cryHera
-   "hi"
- end
+   def cry
+     "hi"
+   end
 
 end
 
@@ -41,11 +41,15 @@ end
 
 =begin
 
-Herald.cry {
- from :rss, :source => "uri"
- from :twitter
- check_for "luke"
- every 1.minutes
-}
+Herald.new(:twitter, :every => 1.minute)
+
+or
+
+Herald.watch do
+  source :rss, :uri => "uri"
+  source :rss, :uris => ["uri1", "uri2"]
+  source :twitter
+  for :soundofmusic
+end
 
 =end
