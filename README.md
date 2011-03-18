@@ -24,7 +24,7 @@ Using with Growl
 
 [Growl](http://growl.info/) is a notification system for Mac OS X.
 
-For Herald to use Growl, enable "Listen for incoming notifications" on the [Network tab of the Growl Preference Panel](http://growl.info/documentation/exploring-preferences.php).
+For Herald to use Growl, enable "Listen for incoming notifications" on the [Network tab](http://growl.info/documentation/exploring-preferences.php) of the Growl Preference Panel.
 
 Usage [IN DEVELOPMENT]
 ----------------------
@@ -89,12 +89,33 @@ To set a different sleep time:
       every 60 => "seconds"
     end
         
+### Alert
+
+Rather than watching, if you just want to get a single poll of keywords, use alert()
+
+  Herald.alert do
+    check :twitter
+    for "#herald"
+    # all other block parameters can be used, except "every"
+  end
+        
 ### Shorthand Methods
 
     # Herald.watch_twitter
     Herald.watch_twitter { _for "#herald" }
-
+    # Herald.alert_twitter
+    Herald.alert_twitter { _for "#herald" }
+    
     # Herald.watch_rss
     Herald.watch_rss { :from => "http://example.com/.rss", _for "herald" }
+    # Herald.alert_rss
+    Herald.alert_rss { :from => "http://example.com/.rss", _for "herald" }
 
-  
+### herald Binary (Not implemented)
+
+    herald -watch twitter -for #eqnz
+    herald -alert twitter -for #herald
+    herald -show-heralds
+    herald -modify 1 -watch rss -from http://example.com/.rss
+    herald -pause 1
+    herald -kill 1
