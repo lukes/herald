@@ -93,11 +93,11 @@ To set a different sleep time:
 
 Rather than watching, if you just want to get a single poll of keywords, use alert()
 
-  Herald.alert do
-    check :twitter
-    for "#herald"
-    # all other block parameters can be used, except "every"
-  end
+    Herald.alert do
+      check :twitter
+      for "#herald"
+      # all other block parameters can be used, except "every"
+    end
         
 ### Shorthand Methods
 
