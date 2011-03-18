@@ -1,7 +1,9 @@
-class Herald
+class Herald  
+  class Watcher
 
- module Twitter
+   module Twitter
 
+=begin
    def self.search
      growl = Growl.new("localhost", "Simple twitter client", ["Message", "Error"])
      response = Net::HTTP.get(URI.parse("http://search.twitter.com/search.json?q=twitter&since=2010-02-28"))
@@ -18,7 +20,14 @@ class Herald
        growl.notify "Error", "Error occurd", "Can not get messages"
      end
    end
+=end
+
+    # make new thread loop
+     def start; puts "Starting..."; end
+
+     def parse_options(options); end
+   
+   end
 
  end
-
 end
