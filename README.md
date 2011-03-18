@@ -18,6 +18,14 @@ Installation
     gem build herald.gemspec
     gem install herald-<version>.gem
 
+
+Using with Growl
+----------------
+
+[Growl](http://growl.info/) is a notification system for Mac OS X.
+
+For Herald to use Growl, enable "Listen for incoming notifications" on the [Network tab of the Growl Preference Panel](http://growl.info/documentation/exploring-preferences.php).
+
 Usage [IN DEVELOPMENT]
 ----------------------
 
@@ -64,7 +72,7 @@ If you'd like to do something else each time a keyword appears, pass a callback
     Herald.watch_twitter do
       _for "revolution"
       growl :off
-      notify do
+      action do
         `say "Viva!"`
       end
     end
@@ -77,7 +85,7 @@ To set a different sleep time:
 
     Herald.watch do
       check :twitter
-      _for :soundofmusic
+      _for "soundofmusic"
       every 60 => "seconds"
     end
         
