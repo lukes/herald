@@ -40,7 +40,7 @@ Or an RSS feed:
 Watching two RSS feeds and Twitter for two keywords
 
     Herald.watch do
-      check :rss, :from => ["http://example.com/one.rss", "http://example.com/two.rss"] {
+      check :rss, :from => ["http://example.com/one.rss", "http://example.com/two.rss"]
       check :twitter
       _for ["christchurch", "earthquake"]
     end
@@ -64,7 +64,7 @@ If you'd like to do something else each time a keyword appears, pass a callback
     Herald.watch_twitter do
       _for "revolution"
       growl :off
-      action do
+      notify do
         `say "Viva!"`
       end
     end
