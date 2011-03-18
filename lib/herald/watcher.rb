@@ -22,7 +22,7 @@ class Herald
     end
     
     def for(keywords)
-      @keywords += keywords.to_a
+      @keywords += Array(keywords.to_s)
     end
     
   end

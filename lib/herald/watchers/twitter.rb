@@ -22,12 +22,23 @@ class Herald
    end
 =end
 
-    # make new thread loop
-     def start; puts "Starting..."; end
+    # TODO make new thread loop
+    def start
+      puts "Starting..."
+      while true
+        # TODO catch URI wrongness, and Grown wrongness
+        begin
+          response = open("http://search.twitter.com/search.json?q=twitter&since=2010-02-28").read
+          Herald::Growl.growl("Yay!", "Success")
+        rescue
+        end
+        sleep 5
+      end
+    end
 
-     def parse_options(options); end
+    def parse_options(options); end
    
-   end
+  end
 
  end
 end

@@ -1,10 +1,16 @@
-require 'net/http'
+#require 'net/http'
+require 'open-uri'
+require 'rss/0.9'
+require 'rss/1.0'
+require 'rss/2.0'
+require 'rss/parser'
 
 require 'rubygems'
 require 'json'
 require 'ruby-growl'
 
 require 'herald/watcher'
+require 'herald/growl'
 require 'herald/watchers/twitter'
 require 'herald/watchers/rss'
 
@@ -19,9 +25,10 @@ class Herald
   end
   
   def self.watch_twitter(&block)
-    
   end
-    
+  def self.watch_rss(&block)
+  end
+  
   def initialize(&block)
     @watchers = []
     if block_given?
