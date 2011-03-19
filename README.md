@@ -42,17 +42,17 @@ Watching two RSS feeds and Twitter for two keywords
     Herald.watch do
       check :rss, :from => ["http://example.com/one.rss", "http://example.com/two.rss"]
       check :twitter
-      _for ["christchurch", "earthquake"]
+      _for "christchurch", "earthquake"
     end
 
 Or, if sources should have different keywords
 
     Herald.watch do
       check :rss, :from => ["http://example.com/one.rss", "http://example.com/two.rss"] {
-        _for ["christchurch", "earthquake"]
+        _for "christchurch", "earthquake"
       }
       check :twitter {
-        _for ["#eqnz", "#chch", "#quake"] 
+        _for "#eqnz", "#chch", "#quake"
       }
     end
     
@@ -70,7 +70,7 @@ You can swap in another action, by passing Herald an `action` parameter:
 To use Growl, pass Herald:
 
     Herald.watch_twitter do
-      _for ["herald", "ruby"]
+      _for "herald", "ruby"
       action :growl
     end
 
@@ -81,11 +81,20 @@ For Herald to use Growl, enable "Listen for incoming notifications" on the [Netw
 To ping a URI, pass Herald:
 
     Herald.watch_twitter do
-      _for ["#yaks", "#in", "#space"]
+      _for "#yaks", "#in", "#space"
       action :ping, :uri => "http://mycounter.com/+1"
     end
     
-#### Callbacks [TO BE IMPLEMENTED IN 0.8]
+#### Post [Not Implemented]
+
+To post information about what Herald finds to a URI, pass Herald:
+
+    Herald.watch_twitter do
+      _for "#yaks", "#in", "#space"
+      action :post, :uri => "http://yakdb.com/post"
+    end
+    
+#### Callbacks [Not Implemented]
 
 If you'd like to do your own thing entirely each time a keyword appears, pass a callback
 
@@ -97,7 +106,7 @@ If you'd like to do your own thing entirely each time a keyword appears, pass a 
     end
     
 
-### Timer
+### Timer [Not Implemented]
 
 By default Herald will sleep for 2 minutes after checking each of the sources independently. 
 To set a different sleep time:
@@ -118,7 +127,7 @@ Rather than watching, if you just want to get a single poll of keywords, use `on
       # all other block parameters can be used, except "every"
     end
 
-### herald Binary [TO BE IMPLEMENTED IN 1.0]
+### herald Binary [Not Implemented]
 
     herald -watch twitter -for #eqnz
     herald -alert twitter -for #herald
