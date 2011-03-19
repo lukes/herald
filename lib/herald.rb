@@ -7,30 +7,38 @@ require 'rss/parser'
 
 require 'rubygems'
 require 'json'
-require 'ruby-growl'
+require 'ruby-growl' # make this optional?
+require 'ping'
 
 require 'herald/watcher'
-require 'herald/growl'
+require 'herald/notifier'
 require 'herald/watchers/twitter'
 require 'herald/watchers/rss'
+require 'herald/notifiers/growl'
 
 class Herald
 
-  attr_reader :watchers, :growl
+  attr_reader :watchers
 
   def self.watch(&block)
     herald = new(&block)
-    herald.start_watching
+    herald.start
     herald
   end
   
-  def self.watch_twitter(&block)
+  def self.once(&block)
+    herald = new(&block)
+    herald.once
+    herald
   end
-  def self.watch_rss(&block)
-  end
+ 
+#  Shorthand methods? 
+#  def self.watch_twitter(&block); end
+#  def self.watch_rss(&block); end
   
   def initialize(&block)
     @watchers = []
+    @notifiers = []
     if block_given?
       block.arity == 1 ? yield(self) : instance_eval(&block)
     end
@@ -46,20 +54,36 @@ class Herald
     end
   end
 
-  def growl(switch = true)
-    @growl = [true, :on].include?(switch)
+  # TODO implement block
+  def action(type = :growl, options = {}, &block)
+    if block_given?
+      raise "Callbacks not implemented yet"
+    end
+    @watchers.each do |watcher|
+      watcher.action(type, options)
+    end
   end
     
   def every(time = { 120 => "seconds" })
   end
   
-  def action(&block); end
-  
 #private
   
-  def start_watching
+  def start
     @watchers.each do |watcher|
       watcher.start
+    end
+  end
+  
+  def stop
+    @watchers.each do |watcher|
+      watcher.stop
+    end
+  end
+
+  def once
+    @watchers.each do |watcher|
+      watcher.once
     end
   end
 
