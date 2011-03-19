@@ -85,7 +85,7 @@ To ping a URI, pass Herald:
       action :ping, :uri => "http://mycounter.com/+1"
     end
     
-#### Callbacks [NOT IMPLEMENTED]
+#### Callbacks [TO BE IMPLEMENTED IN 0.8]
 
 If you'd like to do your own thing entirely each time a keyword appears, pass a callback
 
@@ -118,7 +118,7 @@ Rather than watching, if you just want to get a single poll of keywords, use `on
       # all other block parameters can be used, except "every"
     end
 
-### herald Binary (NOT IMPLEMENTED)
+### herald Binary [TO BE IMPLEMENTED IN 1.0]
 
     herald -watch twitter -for #eqnz
     herald -alert twitter -for #herald
