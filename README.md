@@ -57,7 +57,7 @@ Or, if sources should have different keywords
     end
     
 
-### Choosing An Action To Take
+### Actions
 
 By default Herald will use Growl if it is installed.
 
@@ -69,7 +69,7 @@ You can swap in another action, by passing Herald an `action` parameter:
       action :ping
     end
 
-# Growl
+#### Growl
 
 [Growl](http://growl.info/) is a notification system for Mac OS X.
 
@@ -79,7 +79,7 @@ To use Growl, pass Herald:
 
 For Herald to use Growl, enable "Listen for incoming notifications" on the [Network tab](http://growl.info/documentation/exploring-preferences.php) of the Growl Preference Panel.
 
-# Ping
+#### Ping
 
 Pass Herald:
 
@@ -87,7 +87,7 @@ Pass Herald:
 
 Herald will ping the given URI. The receiving URI can then do whatever it likes, say, increment a counter in its database.
     
-# Callbacks [NOT IMPLEMENTED]
+#### Callbacks [NOT IMPLEMENTED]
 
 If you'd like to do your own thing entirely each time a keyword appears, pass a callback
 
