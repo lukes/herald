@@ -63,29 +63,27 @@ By default Herald will use Growl if it is installed.
 
 You can swap in another action, by passing Herald an `action` parameter:
 
-    Herald.watch do
-      check :twitter
-      _for ["#japan", "#earthquake"]
-      action :ping
-    end
-
 #### Growl
 
 [Growl](http://growl.info/) is a notification system for Mac OS X.
 
 To use Growl, pass Herald:
 
-    action :growl
+    Herald.watch_twitter do
+      _for ["herald", "ruby"]
+      action :growl
+    end
 
 For Herald to use Growl, enable "Listen for incoming notifications" on the [Network tab](http://growl.info/documentation/exploring-preferences.php) of the Growl Preference Panel.
 
 #### Ping
 
-Pass Herald:
+To ping a URI, pass Herald:
 
-    action :ping, :uri => "http://example.com"
-
-Herald will ping the given URI. The receiving URI can then do whatever it likes, say, increment a counter in its database.
+    Herald.watch_twitter do
+      _for ["#yaks", "#in", "#space"]
+      action :ping, :uri => "http://mycounter.com/+1"
+    end
     
 #### Callbacks [NOT IMPLEMENTED]
 
@@ -112,7 +110,7 @@ To set a different sleep time:
         
 ### Look Once
 
-Rather than watching, if you just want to get a single poll of keywords, use once()
+Rather than watching, if you just want to get a single poll of keywords, use `once()`
 
     Herald.once do
       check :twitter
@@ -120,7 +118,7 @@ Rather than watching, if you just want to get a single poll of keywords, use onc
       # all other block parameters can be used, except "every"
     end
 
-### herald Binary (Not implemented)
+### herald Binary (NOT IMPLEMENTED)
 
     herald -watch twitter -for #eqnz
     herald -alert twitter -for #herald
