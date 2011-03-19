@@ -1,9 +1,9 @@
 Herald
 ====
 
-Herald is a simple Growl notifier for Twitter, RSS, or email. 
+Herald is a simple notifier for Twitter, RSS, or email. 
 
-Pass Herald some keywords and sources, and you'll be notified when your keywords appear.
+Pass Herald some keywords and sources to watch, and Herald will notify you using Growl, send an email, hit a URI or run some arbitrary code of your choice as soon as those keywords appear.
 
 Installation
 ------------
@@ -18,15 +18,7 @@ Installation
     gem build herald.gemspec
     gem install herald-<version>.gem
 
-
-Using with Growl
-----------------
-
-[Growl](http://growl.info/) is a notification system for Mac OS X.
-
-For Herald to use Growl, enable "Listen for incoming notifications" on the [Network tab](http://growl.info/documentation/exploring-preferences.php) of the Growl Preference Panel.
-
-Usage [IN DEVELOPMENT]
+Usage
 ----------------------
 
 Watch for tweets containing "soundofmusic":
@@ -42,7 +34,7 @@ Or an RSS feed:
       check :rss, :from => "http://example.com/.rss"
       _for "soundofmusic"
     end
-  
+
 ### Watching multiple sources, or for multiple keywords
 
 Watching two RSS feeds and Twitter for two keywords
@@ -65,13 +57,42 @@ Or, if sources should have different keywords
     end
     
 
-### Callbacks
+### Choosing An Action To Take
 
-If you'd like to do something else each time a keyword appears, pass a callback
+By default Herald will use Growl if it is installed.
+
+You can swap in another action, by passing Herald an `action` parameter:
+
+    Herald.watch do
+      check :twitter
+      _for ["#japan", "#earthquake"]
+      action :ping
+    end
+
+# Growl
+
+[Growl](http://growl.info/) is a notification system for Mac OS X.
+
+To use Growl, pass Herald:
+
+    action :growl
+
+For Herald to use Growl, enable "Listen for incoming notifications" on the [Network tab](http://growl.info/documentation/exploring-preferences.php) of the Growl Preference Panel.
+
+# Ping
+
+Pass Herald:
+
+    action :ping, :uri => "http://example.com"
+
+Herald will ping the given URI. The receiving URI can then do whatever it likes, say, increment a counter in its database.
+    
+# Callbacks [NOT IMPLEMENTED]
+
+If you'd like to do your own thing entirely each time a keyword appears, pass a callback
 
     Herald.watch_twitter do
       _for "revolution"
-      growl :off
       action do
         `say "Viva!"`
       end
@@ -89,27 +110,15 @@ To set a different sleep time:
       every 60 => "seconds"
     end
         
-### Alert
+### Look Once
 
-Rather than watching, if you just want to get a single poll of keywords, use alert()
+Rather than watching, if you just want to get a single poll of keywords, use once()
 
-    Herald.alert do
+    Herald.once do
       check :twitter
       for "#herald"
       # all other block parameters can be used, except "every"
     end
-        
-### Shorthand Methods
-
-    # Herald.watch_twitter
-    Herald.watch_twitter { _for "#herald" }
-    # Herald.alert_twitter
-    Herald.alert_twitter { _for "#herald" }
-    
-    # Herald.watch_rss
-    Herald.watch_rss { :from => "http://example.com/.rss", _for "herald" }
-    # Herald.alert_rss
-    Herald.alert_rss { :from => "http://example.com/.rss", _for "herald" }
 
 ### herald Binary (Not implemented)
 
