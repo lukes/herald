@@ -7,16 +7,9 @@ require 'rss/parser'
 
 require 'rubygems'
 require 'json'
-require 'ruby-growl' # make this optional?
 
-# TODO lazy loading?
 require 'herald/watcher'
 require 'herald/notifier'
-require 'herald/watchers/twitter'
-require 'herald/watchers/rss'
-require 'herald/notifiers/stdout'
-require 'herald/notifiers/growl'
-require 'herald/notifiers/ping'
 
 class Herald
 
@@ -32,6 +25,15 @@ class Herald
     herald = new(&block)
     herald.once
     herald
+  end
+  
+  def self.lazy_load_module(module_path)
+    lazy_load("herald/#{module_path}")
+  end
+  
+  # TODO test whether this can be made private
+  def self.lazy_load(path)
+    require(path)
   end
  
 #  Shorthand methods? 
