@@ -59,7 +59,7 @@ Or, if sources should have different keywords
 
 ### Actions
 
-By default Herald will use Growl if it is installed.
+By default Herald will use Ruby's `$stdout` and simply prints what it finds.
 
 You can swap in another action, by passing Herald an `action` parameter:
 
@@ -74,7 +74,7 @@ To use Growl, pass Herald:
       action :growl
     end
 
-For Herald to use Growl, enable "Listen for incoming notifications" on the [Network tab](http://growl.info/documentation/exploring-preferences.php) of the Growl Preference Panel.
+For Herald to use Growl, enable "Listen for incoming notifications" and "Allow remote application registration" on the [Network tab](http://growl.info/documentation/exploring-preferences.php) of the Growl Preference Panel.
 
 #### Ping
 

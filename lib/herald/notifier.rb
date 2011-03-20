@@ -3,7 +3,8 @@ class Herald
     
     class Notifier
     
-      @@notifier_types = [:growl, :ping]
+      @@notifier_types = [:stdout, :growl, :ping]
+      DEFAULT_NOTIFIER = :stdout
     
       def initialize(type, options)
         @type = type.to_sym

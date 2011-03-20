@@ -7,12 +7,15 @@ class Herald
         # TODO test growl on system and throw exception if fail
         def test
         end
-    
-        # TODO catch Errno::ECONNREFUSED when preference pane isn't set correctly
+        
+        # send a Growl notification
         def notify(title, message)
           begin
             `growl -H localhost -t #{title} -m #{message}`
-          rescue 
+          rescue Errno::ECONNREFUSED => e
+            # TODO raise a custom Error
+            raise "Growl not installed, or not configured correctly to allow remote application\n
+                  registration. See http://growl.info/documentation/exploring-preferences.php"
           end
           true
         end
