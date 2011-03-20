@@ -19,3 +19,5 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- test/*`.split("\n")
   s.require_paths = ["lib"]
 end
+
+# TODO - show dependency on ruby-growl if installed for mac
