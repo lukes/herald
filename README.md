@@ -69,7 +69,7 @@ You can swap in another action by passing Herald one of the following `action` p
 
 [Growl](http://growl.info/) is a notification system for Mac OS X.
 
-To use Growl, enable "Listen for incoming notifications" and "Allow remote application registration" on the [Network tab](http://growl.info/documentation/exploring-preferences.php) of the Growl Preference Panel, and pass Herald:
+To use Growl, enable "Listen for incoming notifications" and "Allow remote application registration" on the [Network tab](http://growl.info/documentation/exploring-preferences.php) of the Growl Preference Panel, and pass Herald `action :growl`:
 
     Herald.watch_twitter do
       _for "herald", "ruby"
@@ -78,7 +78,7 @@ To use Growl, enable "Listen for incoming notifications" and "Allow remote appli
 
 #### Ping
 
-To ping a URI, pass Herald:
+To ping a URI, pass Herald `action :ping, :uri => "http://address.to.ping"`:
 
     Herald.watch_twitter do
       _for "#yaks", "#in", "#space"
@@ -87,7 +87,7 @@ To ping a URI, pass Herald:
     
 #### Post [Not Implemented]
 
-To post information about what Herald finds to a URI, pass Herald:
+To post information about what Herald finds to a URI, pass Herald `action :post, :uri => "http://address.to.post.to"`:
 
     Herald.watch_twitter do
       _for "#yaks", "#in", "#space"
@@ -96,7 +96,7 @@ To post information about what Herald finds to a URI, pass Herald:
     
 #### Callbacks [Not Implemented]
 
-If you'd like to do your own thing entirely each time a keyword appears, pass a callback
+If you'd like to do your own thing entirely each time a keyword appears, pass a callback in the form of a Ruby block:
 
     Herald.watch_twitter do
       _for "revolution"
@@ -119,15 +119,14 @@ To set a different sleep time:
         
 ### Look Once
 
-Rather than watching, if you just want to get a single poll of keywords, use `once()`
+Rather than watching, if you just want to get a single poll of keywords, use `once()`. All the same parameters as with `watch()` can be used (exception `:every`, of course).
 
     Herald.once do
       check :twitter
       for "#herald"
-      # all other block parameters can be used, except "every"
     end
 
-### herald Binary [Not Implemented]
+### Herald Binary [Not Implemented]
 
     herald -watch twitter -for #eqnz
     herald -alert twitter -for #herald
