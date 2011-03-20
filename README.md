@@ -8,8 +8,6 @@ Pass Herald some keywords and sources to watch, and Herald will notify you using
 Installation
 ------------
 
-Herald needs [Ruby 1.8.7 or later](http://www.ruby-lang.org/en/downloads/).
-
 ### Rubygems
 
     gem install herald
@@ -132,3 +130,7 @@ Rather than watching, if you just want to get a single poll of keywords, use `on
     herald -modify 1 -watch rss -from http://example.com/.rss
     herald -pause 1
     herald -kill 1
+    
+### Notes
+
+* Herald requires [Ruby 1.8.7 or later](http://www.ruby-lang.org/en/downloads/).
