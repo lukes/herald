@@ -19,7 +19,7 @@ Installation
     gem install herald-<version>.gem
 
 Usage
-----------------------
+-----
 
 Watch for tweets containing "soundofmusic":
 
@@ -34,6 +34,15 @@ Or an RSS feed:
       check :rss, :from => "http://example.com/.rss"
       _for "soundofmusic"
     end
+
+Or an email inbox:
+
+    Herald.watch do
+      check :inbox, :imap => "imap.server.com", :user => "username", :pass => "supersecret"
+      _for "soundofmusic"
+    end
+
+In all cases, Herald limits its search to the first 100 items.
 
 ### Watching multiple sources, or for multiple keywords
 
