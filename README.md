@@ -8,11 +8,9 @@ Pass Herald some keywords and sources to watch, and Herald will notify you using
 Installation
 ------------
 
-Herald requires Ruby 1.8.7 or later. Ruby comes standard on a Mac. Windows-users: download the [RubyInstaller](http://rubyinstaller.org/). For linux: `sudo apt-get install ruby-full`.
+Herald needs [Ruby 1.8.7 or later](http://www.ruby-lang.org/en/downloads/).
 
 ### Rubygems
-
-Open a console, type:
 
     gem install herald
 
@@ -65,20 +63,18 @@ Or, if sources should have different keywords
 
 By default Herald will use Ruby's `$stdout` and simply prints what it finds.
 
-You can swap in another action, by passing Herald an `action` parameter:
+You can swap in another action by passing Herald one of the following `action` parameters:
 
 #### Growl
 
 [Growl](http://growl.info/) is a notification system for Mac OS X.
 
-To use Growl, pass Herald:
+To use Growl, enable "Listen for incoming notifications" and "Allow remote application registration" on the [Network tab](http://growl.info/documentation/exploring-preferences.php) of the Growl Preference Panel, and pass Herald:
 
     Herald.watch_twitter do
       _for "herald", "ruby"
       action :growl
     end
-
-For Herald to use Growl, enable "Listen for incoming notifications" and "Allow remote application registration" on the [Network tab](http://growl.info/documentation/exploring-preferences.php) of the Growl Preference Panel.
 
 #### Ping
 
