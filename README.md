@@ -3,12 +3,16 @@ Herald
 
 Herald is a simple notifier for Twitter, RSS, or email. 
 
-Pass Herald some keywords and sources to watch, and Herald will notify you using Growl, send an email, hit a URI or run some arbitrary code of your choice as soon as those keywords appear.
+Pass Herald some keywords and sources to watch, and Herald will notify you using Growl, email, pinging a site, or running Ruby code as soon as those keywords appear.
 
 Installation
 ------------
 
+Herald requires Ruby 1.8.7 or later. Ruby comes standard on a Mac. Windows-users: download the [RubyInstaller](http://rubyinstaller.org/). For linux: `sudo apt-get install ruby-full`.
+
 ### Rubygems
+
+Open a console, type:
 
     gem install herald
 
