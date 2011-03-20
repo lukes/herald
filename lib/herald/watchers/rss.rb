@@ -14,11 +14,8 @@ class Herald
 
      # spawn thread for each uri given
      def start; puts "Starting..."; end
-     def stop; end
-     
-    private
-    
-       def activites; end
+     def stop; end    
+     def activites; end
         
    end
  

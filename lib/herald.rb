@@ -8,13 +8,15 @@ require 'rss/parser'
 require 'rubygems'
 require 'json'
 require 'ruby-growl' # make this optional?
-require 'ping'
 
+# TODO lazy loading?
 require 'herald/watcher'
 require 'herald/notifier'
 require 'herald/watchers/twitter'
 require 'herald/watchers/rss'
+require 'herald/notifiers/stdout'
 require 'herald/notifiers/growl'
+require 'herald/notifiers/ping'
 
 class Herald
 
@@ -38,24 +40,26 @@ class Herald
   
   def initialize(&block)
     @watchers = []
-    @notifiers = []
     if block_given?
       block.arity == 1 ? yield(self) : instance_eval(&block)
     end
+    # TODO does it matter if @watchers.empty? at this point
   end
   
+  # create a new Watcher
   def check(type, options = {}, &block)
     @watchers << Herald::Watcher.new(type, options, &block)
   end
-  
-  def _for(keywords)
+
+  # send keywords to each Watcher  
+  def _for(*keywords)
     @watchers.each do |watcher|
-      watcher.for(keywords)
+      watcher.for(*keywords)
     end
   end
 
-  # TODO implement block
-  def action(type = :growl, options = {}, &block)
+  # send instructions on what to do to each Watcher
+  def action(type, options = {}, &block)
     if block_given?
       raise "Callbacks not implemented yet"
     end
@@ -64,26 +68,29 @@ class Herald
     end
   end
     
-  def every(time = { 120 => "seconds" })
-  end
+  # TODO
+  def every(time = { 120 => "seconds" }); end
   
 #private
   
+  # start Watchers
   def start
     @watchers.each do |watcher|
       watcher.start
     end
   end
   
+  # stop Watchers
   def stop
     @watchers.each do |watcher|
       watcher.stop
     end
   end
 
+  # call each Watcher's activities once
   def once
     @watchers.each do |watcher|
-      watcher.once
+      watcher.activities
     end
   end
 
