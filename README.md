@@ -21,7 +21,7 @@ Installation
 Usage
 -----
 
-`require` Herald into your Ruby project:
+First step, `require` Herald into your Ruby project to begin using it:
 
     require 'rubygems'
     require 'herald'
