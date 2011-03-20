@@ -29,7 +29,7 @@ Watch for tweets containing "soundofmusic":
       check :twitter
       _for "soundofmusic"
     end
-    
+
 Or an RSS feed:
 
     Herald.watch do
@@ -57,7 +57,6 @@ Or, if sources should have different keywords
         _for "#eqnz", "#chch", "#quake"
       }
     end
-    
 
 ### Actions
 
@@ -104,7 +103,6 @@ If you'd like to do your own thing entirely each time a keyword appears, pass a 
         `say "Viva!"`
       end
     end
-    
 
 ### Timer [Not Implemented]
 
