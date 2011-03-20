@@ -14,15 +14,18 @@ class Herald
       unless @@watcher_types.include?(type)
         raise ArgumentError, "#{type} is not a valid Watcher type"
       end
+      Herald.lazy_load_module("watchers/#{type}")
       # extend class with module
       send(:extend, eval(type.to_s.capitalize))
       parse_options(options)
-      #if block_given?
-      #  instance_eval(&block)
-      #end
+      # TODO call Watcher::test()?
+#      if block_given?
+#        instance_eval(&block)
+#      end
       # set a default Notifier, unless it's been
       # set further up the initialisation chain
       if @notifiers.empty?
+        Herald.lazy_load_module("notifiers/#{Notifier::DEFAULT_NOTIFIER}")
         @notifiers = action(Notifier::DEFAULT_NOTIFIER, {})
       end
     end
@@ -33,9 +36,9 @@ class Herald
     
     # assign the Notifiers
     def action(type, options)
-      if [:off, :none, false, nil].include?(type.to_sym)
-        @notifiers.clear and return
-      end
+#      if [:off, :none, false, nil].include?(type.to_sym)
+#        @notifiers.clear and return
+#      end
       @notifiers << Herald::Watcher::Notifier.new(type, options)
     end
     
@@ -45,7 +48,7 @@ class Herald
         notifier.notify(title, message)
       end
     end
-    
+      
     # (activities(), start(), stop() are defined in the individual Notifier modules)
     
   end
