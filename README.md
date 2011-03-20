@@ -115,7 +115,7 @@ To set a different sleep time:
         
 ### Look Once
 
-Rather than watching, if you just want to get a single poll of keywords, use `once()`. All the same parameters as with `watch()` can be used (exception `:every`, of course).
+Rather than watching, if you just want to get a single poll of keywords, use `once()`. All the same parameters as with `watch()` can be used (except `:every`).
 
     Herald.once do
       check :twitter
@@ -130,7 +130,3 @@ Rather than watching, if you just want to get a single poll of keywords, use `on
     herald -modify 1 -watch rss -from http://example.com/.rss
     herald -pause 1
     herald -kill 1
-    
-### Notes
-
-* Herald requires [Ruby 1.8.7 or later](http://www.ruby-lang.org/en/downloads/).
