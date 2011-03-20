@@ -3,6 +3,8 @@ class Herald
     
     class Notifier
     
+      # TODO, make this dynamic? to allow people to write
+      # their own and drop it into notifiers dir
       @@notifier_types = [:stdout, :growl, :ping]
       DEFAULT_NOTIFIER = :stdout
     
