@@ -46,8 +46,7 @@ class Herald
       end
     end
     
-    # activities(), start(), stop()
-    # handled by Notifier modules
+    # (activities(), start(), stop() are defined in the individual Notifier modules)
     
   end
   
