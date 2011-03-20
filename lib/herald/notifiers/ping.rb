@@ -6,6 +6,11 @@ class Herald
     
         attr_reader :uri
     
+        # TODO test ping to URL on system and throw exception if fail
+        def test
+          Net::HTTP.new(@uri).head('/').kind_of?(Net::HTTPOK)
+        end
+        
         # TODO catch exception
         def notify(title, message)
           begin
@@ -23,11 +28,6 @@ class Herald
             raise ArgumentError, ":uri not specified for :ping action"
           end
           @uri.scheme = "http" if @uri.scheme.nil? # if missing protocol from URI
-        end
-    
-        # TODO test ping to URL on system and throw exception if fail
-        def test
-          Net::HTTP.new(@uri).head('/').kind_of?(Net::HTTPOK)
         end
         
       end
