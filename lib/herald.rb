@@ -1,9 +1,5 @@
 #require 'net/http'
 require 'open-uri'
-require 'rss/0.9'
-require 'rss/1.0'
-require 'rss/2.0'
-require 'rss/parser'
 
 require 'rubygems'
 require 'json'
