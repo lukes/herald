@@ -21,6 +21,11 @@ Installation
 Usage
 -----
 
+`require` Herald into your Ruby project:
+
+    require 'rubygems'
+    require 'herald'
+
 Watch for tweets containing "soundofmusic":
 
     Herald.watch do
