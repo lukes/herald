@@ -40,8 +40,14 @@ class Herald
     end
     
     # assign the Notifiers
-    def action(type, options)
-      @notifiers << Herald::Watcher::Notifier.new(type, options)
+    def action(type = nil, options = {}, &block)
+      # if a callback given
+      if block_given?
+        @notifiers << Herald::Watcher::Notifier.new(:callback, options, &block)
+      else
+        # otherwise, assign a Notifier
+        @notifiers << Herald::Watcher::Notifier.new(type, options)
+      end
     end
     
     # TODO parse a hash like { 120 => "seconds" }
