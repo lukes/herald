@@ -6,16 +6,15 @@ class Herald
 
         attr_reader :proc
 
+        # no options for Callback
         def parse_options(options); end
         
-        # TODO test block? or not?
+        # we can't sandbox the proc to test it out,
+        # so just return true
         def test; true; end
 
-        # 
         def notify(title, message)
           @proc.call
-#          $stdout.puts "#{title}: #{message}"
-#          $stdout.flush
         end
 
       end
