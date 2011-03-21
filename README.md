@@ -62,12 +62,12 @@ Watching two RSS feeds and Twitter for two keywords
 Or, if sources should have different keywords
 
     Herald.watch do
-      check :rss, :from => ["http://example.com/one.rss", "http://example.com/two.rss"] {
+      check :rss, :from => ["http://example.com/one.rss", "http://example.com/two.rss"] do
         _for "christchurch", "earthquake"
-      }
-      check :twitter {
+      end
+      check :twitter do
         _for "#eqnz", "#chch", "#quake"
-      }
+      end
     end
 
 ### Actions
