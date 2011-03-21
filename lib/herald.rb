@@ -49,7 +49,7 @@ class Herald
   # send keywords to Watchers
   def _for(*keywords)
     @watchers.each do |watcher|
-      watcher.for(*keywords)
+      watcher._for(*keywords)
     end
   end
 

@@ -7,7 +7,7 @@ class Herald
         # no options to parse for Growl
         def parse_options(options); end
         
-        # TODO test growl on system and throw exception if fail.
+        # test growl on system and throw exception if fail.
         def test
           # TODO suppress output
           unless(system("growl --version"))
