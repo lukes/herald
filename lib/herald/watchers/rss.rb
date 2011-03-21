@@ -5,7 +5,7 @@ class Herald
 
       attr_reader :uri
       
-      # lazy-load net/http and rss when this Module is used as a Notifier
+      # lazy-load net/http and rss when this Module is used
       def self.extended(base)
         %w(net/http rss/0.9 rss/1.0 rss/2.0 rss/parser).each do |lib|
           Herald.lazy_load(lib)

@@ -6,7 +6,7 @@ class Herald
 
       attr_reader :uri, :last_tweet_id
 
-      # lazy-load net/http when this Module is used as a Notifier
+      # lazy-load net/http when this Module is used
       def self.extended(base)
         Herald.lazy_load('net/http')
         Herald.lazy_load('json')
