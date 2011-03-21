@@ -35,7 +35,7 @@ class Herald
       end
     end
     
-    def for(*keywords)
+    def _for(*keywords)
       @keywords += keywords
     end
     
