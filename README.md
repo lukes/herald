@@ -129,11 +129,35 @@ To set a different sleep time:
         
 ### Look Once
 
-Rather than watching, if you just want to get a single poll of keywords, use `once()`. All the same parameters as with `watch()` can be used (except `:every`).
+Rather than watching, if you just want to get a single poll of keywords, use `once()`. All the same parameters as with `watch()` can be used (except `every`).
 
     Herald.once do
       check :twitter
       _for "#herald"
+    end
+    
+### Callback Scope and Herald Metaprogramming
+
+Callbacks allow a great deal of reflection into the internals of Herald.
+
+If the callback is passed with the scope of `Herald`, it will have access to the `Herald` instance variables:
+
+    Herald.watch_twitter do
+      _for "#breaking", "news"
+      action do
+        puts instance_variables
+      end
+    end
+  
+If passed in within the scope of `Herald::Watcher`, it will have access to the particular `Watcher`'s instance variables:
+  
+    Herald.watch do
+      check :twitter do
+        _for "#breaking", "news"
+        action do
+          puts instance_variables
+        end
+      end
     end
 
 ### Herald Binary [Not Implemented]
