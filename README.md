@@ -21,12 +21,12 @@ Installation
 Usage
 -----
 
-First step, `require` Herald into your Ruby project to begin using it:
+First step is `require` Herald into your Ruby project:
 
     require 'rubygems'
     require 'herald'
 
-Watch for tweets containing "soundofmusic":
+Then, to watch for tweets containing "soundofmusic":
 
     Herald.watch do
       check :twitter
@@ -74,7 +74,7 @@ Or, if sources should have different keywords
 
 By default Herald will use Ruby's `$stdout` and simply prints what it finds.
 
-You can swap in another action by passing Herald one of the following `action` parameters:
+Swap in another action by passing Herald one of the following `action` parameters:
 
 #### Growl
 
@@ -133,7 +133,7 @@ Rather than watching, if you just want to get a single poll of keywords, use `on
 
     Herald.once do
       check :twitter
-      for "#herald"
+      _for "#herald"
     end
 
 ### Herald Binary [Not Implemented]
