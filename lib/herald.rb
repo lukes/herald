@@ -5,17 +5,17 @@ require 'herald/notifier'
 
 class Herald
 
-  attr_reader :watchers
+  attr_reader :watchers, :watching
 
   def self.watch(&block)
-    herald = new(&block)
+    herald = new(:watching => true, &block)
     herald.start
     herald
   end
   
   def self.once(&block)
     herald = new(&block)
-    herald.once
+    herald.start
     herald
   end
   
@@ -32,8 +32,9 @@ class Herald
 #  def self.watch_twitter(&block); end
 #  def self.watch_rss(&block); end
   
-  def initialize(&block)
+  def initialize(options = {}, &block)
     @watchers = []
+    @watching = options.delete(:watching)
     if block_given?
       block.arity == 1 ? yield(self) : instance_eval(&block)
     end
@@ -45,14 +46,14 @@ class Herald
     @watchers << Herald::Watcher.new(type, options, &block)
   end
 
-  # send keywords to each Watcher  
+  # send keywords to Watchers
   def _for(*keywords)
     @watchers.each do |watcher|
       watcher.for(*keywords)
     end
   end
 
-  # send instructions on what to do to each Watcher
+  # send instructions to Watchers
   def action(type, options = {}, &block)
     if block_given?
       raise "Callbacks not implemented yet"
@@ -62,29 +63,28 @@ class Herald
     end
   end
     
-  # TODO
-  def every(time = { 120 => "seconds" }); end
-  
-#private
-  
-  # start Watchers
-  def start
+  # send sleep time to Watchers
+  def every(time)
     @watchers.each do |watcher|
-      watcher.start
+      watcher.every(time)
     end
   end
+  
+#private
   
   # stop Watchers
   def stop
     @watchers.each do |watcher|
-      watcher.stop
+      watcher.watching = false
     end
   end
 
-  # call each Watcher's activities once
-  def once
+  # start Watchers
+  def start
     @watchers.each do |watcher|
-      watcher.activities
+      # Watcher will loop for as long as its watching property is true
+      watcher.watching = true if @watching
+      watcher.start
     end
   end
 
