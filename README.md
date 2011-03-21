@@ -116,15 +116,15 @@ If you'd like to do your own thing entirely each time a keyword appears, pass a 
       end
     end
 
-### Timer [Not Implemented]
+### Timer
 
-By default Herald will sleep for 2 minutes after checking each of the sources independently. 
+By default Herald will sleep for 1 minute after checking each of the sources independently. 
 To set a different sleep time:
 
     Herald.watch do
       check :twitter
       _for "soundofmusic"
-      every 60 => "seconds"
+      every 30 => "seconds" # or "minutes", "hours", or "days"
     end
         
 ### Look Once
@@ -139,7 +139,7 @@ Rather than watching, if you just want to get a single poll of keywords, use `on
 ### Herald Binary [Not Implemented]
 
     herald -watch twitter -for #eqnz
-    herald -alert twitter -for #herald
+    herald -once twitter -for #herald
     herald -show-heralds
     herald -modify 1 -watch rss -from http://example.com/.rss
     herald -pause 1

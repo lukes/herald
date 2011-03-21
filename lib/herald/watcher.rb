@@ -3,7 +3,7 @@ class Herald
   class Watcher
     
     @@watcher_types = [:twitter, :rss]
-    DEFAULT_TIMER = 5 # seconds
+    DEFAULT_TIMER = 60
 
     attr_reader :notifiers
     attr_accessor :watching, :keywords, :timer, :last_look
@@ -45,7 +45,22 @@ class Herald
     end
     
     # TODO parse a hash like { 120 => "seconds" }
-    def every(time); end
+    def every(time); 
+      quantity = time.keys.first.to_i
+      unit = case time.values.first
+      when /^second/
+        1
+      when /^minute/
+        60
+      when /^hour/
+        3600
+      when /^day/
+        86400
+      else
+        raise ArgumentError, "Invalid time unit for every. (Use seconds, minutes, hours or days)"
+      end
+      @timer = quantity * unit
+    end
     
     # call the Notifier and pass it a message
     def notify(title, message)
