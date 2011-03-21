@@ -22,17 +22,11 @@ class Herald
       send(:extend, eval(type.to_s.capitalize))
       # each individual Watcher will handle their options
       parse_options(options)
-      # TODO call a Watcher::test()?
       # eval the block, if given
       if block_given?
         block.arity == 1 ? yield(self) : instance_eval(&block)
       end
-      # set a default Notifier for this Watcher, unless it's been
-      # set further up the initialisation chain
-      if @notifiers.empty?
-        Herald.lazy_load_module("notifiers/#{Notifier::DEFAULT_NOTIFIER}")
-        @notifiers = action(Notifier::DEFAULT_NOTIFIER, {})
-      end
+      # TODO implement a Watcher::test()?
     end
     
     def _for(*keywords)
@@ -50,7 +44,7 @@ class Herald
       end
     end
     
-    # TODO parse a hash like { 120 => "seconds" }
+    # parse a hash like { 120 => "seconds" }
     def every(time); 
       quantity = time.keys.first.to_i
       unit = case time.values.first

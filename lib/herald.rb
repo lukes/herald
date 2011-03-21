@@ -2,6 +2,7 @@ require 'rubygems'
 
 require 'herald/watcher'
 require 'herald/notifier'
+require 'herald/notifiers/stdout'
 
 class Herald
 
@@ -81,6 +82,9 @@ class Herald
     @watchers.each do |watcher|
       # Watcher will loop for as long as its watching property is true
       watcher.watching = true if @watching
+      # set a default Notifier for this Watcher
+      watcher.action(Watcher::Notifier::DEFAULT_NOTIFIER) if watcher.notifiers.empty?
+      # start the Watcher
       watcher.start
     end
   end
