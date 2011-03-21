@@ -5,10 +5,10 @@ class Herald
     
       # TODO, make this dynamic? to allow people to write
       # their own and drop it into notifiers dir
-      @@notifier_types = [:stdout, :growl, :ping, :post]
+      @@notifier_types = [:stdout, :growl, :ping, :post, :callback]
       DEFAULT_NOTIFIER = :stdout
     
-      def initialize(type, options)
+      def initialize(type, options, &block)
         type = type.to_sym
         # check notifier type
         unless @@notifier_types.include?(type)
@@ -19,6 +19,10 @@ class Herald
         send(:extend, eval(type.to_s.capitalize))
         # each individual Notifier will handle their options
         parse_options(options)
+        # if callback given
+        if block_given?
+          @proc = block
+        end
         # call test() method of Notifier module
         test()
       end
