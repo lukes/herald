@@ -1,6 +1,7 @@
 class Herald  
   class Watcher
 
+    # TODO, ignore retweets, if option passed
     module Twitter
 
       attr_reader :uri, :last_tweet_id
@@ -39,18 +40,15 @@ class Herald
         json = Net::HTTP.get(URI.parse(@uri.join("&")))
         @last_look = Time.now
         # and parse it to JSON
-        json = JSON.parse(json)['results']
+        json = JSON.parse(json)
         # will be nil if there are no results
         return if json.nil?
-        @last_tweet_id = json.last['id_str']
-        json.each do |tweet|
+        @last_tweet_id = json["max_id"]
+        json['results'].each do |tweet|
           title = "@#{tweet['from_user']}"
           message = tweet['text']
           notify(title, message)
-          # pause between each one
-          sleep 5
         end
-        # TODO @last_tweet_id not having an effect
         @uri = [@uri.first, "since_id=#{@last_tweet_id}"]
         json = nil # TODO, does this help reduce memory after loop has finished?
       end
