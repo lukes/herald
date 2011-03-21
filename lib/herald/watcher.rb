@@ -50,7 +50,6 @@ class Herald
     # call the Notifier and pass it a message
     def notify(title, message)
       @notifiers.each do |notifier|
-        puts "Notifying something..."
         notifier.notify(title, message)
       end
     end
