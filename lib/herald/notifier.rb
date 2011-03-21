@@ -20,7 +20,7 @@ class Herald
         # each individual Notifier will handle their options
         parse_options(options)
         # call test() method of Notifier module
-        test
+        test()
       end
     
     end
