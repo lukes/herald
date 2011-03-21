@@ -16,7 +16,7 @@ class Herald
 
         # print to $stdout
         def notify(title, message)
-          $stdout.puts "#{title}:\t#{message}"
+          $stdout.puts "#{title}: #{message}"
           $stdout.flush
         end
 
