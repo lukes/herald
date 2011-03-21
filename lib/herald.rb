@@ -54,12 +54,9 @@ class Herald
   end
 
   # send instructions to Watchers
-  def action(type, options = {}, &block)
-    if block_given?
-      raise "Callbacks not implemented yet"
-    end
+  def action(type = nil, options = {}, &block)
     @watchers.each do |watcher|
-      watcher.action(type, options)
+      watcher.action(type, options, &block)
     end
   end
     
