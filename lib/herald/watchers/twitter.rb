@@ -42,7 +42,7 @@ class Herald
         # and parse it to JSON
         json = JSON.parse(json)
         # will be nil if there are no results
-        return if json.nil?
+        return if json['results'].nil?
         @last_tweet_id = json["max_id"]
         json['results'].each do |tweet|
           title = "@#{tweet['from_user']}"
