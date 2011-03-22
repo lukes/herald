@@ -96,7 +96,7 @@ To ping a URI, pass Herald `action :ping, :uri => "http://address.to.ping"`:
       action :ping, :uri => "http://mycounter.com/+1"
     end
     
-#### Post [Not Implemented]
+#### Post
 
 To post information about what Herald finds to a URI, pass Herald `action :post, :uri => "http://address.to.post.to"`:
 
@@ -105,7 +105,7 @@ To post information about what Herald finds to a URI, pass Herald `action :post,
       action :post, :uri => "http://yakdb.com/post"
     end
     
-#### Callbacks [Not Implemented]
+#### Callbacks
 
 If you'd like to do your own thing entirely each time a keyword appears, pass a callback in the form of a Ruby block:
 
