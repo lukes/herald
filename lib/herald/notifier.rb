@@ -5,7 +5,7 @@ class Herald
     
       # TODO, make this dynamic? to allow people to write
       # their own and drop it into notifiers dir
-      @@notifier_types = [:stdout, :growl, :ping, :post, :callback]
+      @@notifier_types = [:callback, :growl, :ping, :post, :stdout]
       DEFAULT_NOTIFIER = :stdout
     
       def initialize(type, options, &block)
