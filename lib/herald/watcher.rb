@@ -75,8 +75,20 @@ class Herald
         notifier.notify(title, message)
       end
     end
+    
+    def start
+      # prepare() is defined in the individual Watcher modules.
+      # any pre-tasks are performed before
+      prepare()
+      # TODO make new thread loop
+      # begin loop, which will execute at least once (like a do-while loop)
+      begin
+        activities
+        sleep @timer if @watching
+      end while @watching
+    end
         
-    # (start(), stop() are defined in the individual Notifier modules)
+    # (stop() is defined in the individual Watcher modules)
     
   end
   

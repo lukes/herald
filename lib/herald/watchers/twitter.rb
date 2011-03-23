@@ -14,9 +14,8 @@ class Herald
 
       def parse_options(options); end
       
-      # TODO make new thread loop
-      def start
-        # prepare some of the variables:
+      # executed before Watcher starts
+      def prepare
         # URI.parse() in the standard library doesn't encode "#" characters in string!
         # in the meantime ...
         @keywords.map! { |word| word.gsub!('#', '%23') }
@@ -24,11 +23,6 @@ class Herald
         # the second element will be a "since_id" extra query parameter, added at close of 
         # activities() loop
         @uri = ["http://search.twitter.com/search.json?q=#{@keywords.join('+')}"]
-        # begin loop, which will execute at least once (like a do-while loop)
-        begin
-          activities
-          sleep @timer if @watching
-        end while @watching
       end
 
       def stop; end
