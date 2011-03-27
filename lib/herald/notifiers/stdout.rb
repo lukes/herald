@@ -16,7 +16,7 @@ class Herald
 
         # print to $stdout
         def notify(item)
-          $stdout.puts "#{item.title}: #{item.message}"
+          $stdout.puts item.data
           $stdout.flush
         end
 
