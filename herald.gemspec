@@ -13,6 +13,7 @@ Gem::Specification.new do |s|
   s.description = %q{TODO: Write a gem description}
 
   s.required_rubygems_version = ">= 1.3.6" # TODO test earliest dependency
+  s.add_dependency('json')
   s.rubyforge_project         = "herald"
 
   s.files         = `git ls-files`.split("\n")
