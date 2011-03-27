@@ -18,14 +18,17 @@ class Herald
       def prepare
         # URI.parse() in the standard library doesn't encode "#" characters in string!
         # in the meantime ...
-        @keywords.map! { |word| word.gsub!('#', '%23') }
+        @keywords.map! do |word| 
+          word.gsub!('#', '%23') 
+          word
+        end
         # initialise array, first element will be the Twitter API with search query string, 
         # the second element will be a "since_id" extra query parameter, added at close of 
         # activities() loop
         @uri = ["http://search.twitter.com/search.json?q=#{@keywords.join('+')}"]
       end
 
-      def stop; end
+      def cleanup; end
       
     private
 

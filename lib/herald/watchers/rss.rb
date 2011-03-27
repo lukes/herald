@@ -20,7 +20,7 @@ class Herald
       end
 
       def prepare; end      
-      def stop; end    
+      def cleanup; end    
             
     private
     
