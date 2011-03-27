@@ -13,7 +13,7 @@ class Herald
         # so just return true
         def test; true; end
 
-        def notify(title, message)
+        def notify(item)
           @proc.call
         end
 

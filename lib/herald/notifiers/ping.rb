@@ -35,7 +35,7 @@ class Herald
           end
         end
 
-        def notify(title, message)
+        def notify(item)
           Net::HTTP.new(@uri.host).head('/')
         end
 

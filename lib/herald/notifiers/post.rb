@@ -36,8 +36,8 @@ class Herald
           end
         end
 
-        def notify(title, message)
-          Net::HTTP.post_form(@uri.to_s, { "title" => title, "message" => message })
+        def notify(item)
+          Net::HTTP.post_form(@uri.to_s, { "title" => item.title, "message" => item.message })
         end
 
       end

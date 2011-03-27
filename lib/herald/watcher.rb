@@ -6,7 +6,7 @@ class Herald
     DEFAULT_TIMER = 60
 
     attr_reader :notifiers, :keep_alive, :thread
-    attr_accessor :keywords, :timer, :last_look
+    attr_accessor :keywords, :timer#, :last_look
     
     def initialize(type, keep_alive, options, &block)
       type = type.to_sym
@@ -32,7 +32,7 @@ class Herald
       parse_options(options)
       # eval the block, if given
       if block_given?
-        block.arity == 1 ? yield(self) : instance_eval(&block)
+        instance_eval(&block)
       end
       # TODO implement a Watcher::test()?
     end
@@ -65,9 +65,9 @@ class Herald
     end
     
     # call the Notifier and pass it a message
-    def notify(title, message)
+    def notify(item)
       @notifiers.each do |notifier|
-        notifier.notify(title, message)
+        notifier.notify(item)
       end
     end
     
