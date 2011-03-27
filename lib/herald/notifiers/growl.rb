@@ -22,6 +22,8 @@ class Herald
           # presence of ruby-growl has already been tested in test(), so a false
           # return is likely to be the user's Growl settings
           # TODO escape characters in title and message
+          title.gsub!("'", '')
+          message.gsub!("'", '')
           if !system("growl -H localhost -t '#{title}' -m '#{message}'")
             # TODO throw custom exception
             raise "Growl settings not configured to allow remote application registration. See Growl website docs: http://growl.info/documentation/exploring-preferences.php"
