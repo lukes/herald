@@ -3,6 +3,7 @@ require 'rubygems'
 require 'herald/watcher'
 require 'herald/notifier'
 require 'herald/notifiers/stdout'
+require 'herald/item'
 
 class Herald
 
@@ -82,10 +83,14 @@ class Herald
         thread.join unless thread == Thread.main
       end
     }
-    # if process is not persistant, then
-    # wait before the end of this script
-    # for all watchers to finish their jobs
-    Process.waitpid(@subprocess) unless @keep_alive
+    # if herald process is persistant
+    if @keep_alive
+      Process.detach(@subprocess)
+    else
+      # wait before the end of this script
+      # for all watchers to finish their jobs
+      Process.waitpid(@subprocess)
+    end
     self # return instance object
   end
 
@@ -93,10 +98,15 @@ class Herald
     # is there a gentler way of doing it?
     # or have watchers do cleanup tasks on exit?
     # look at GOD
+    # TODO, if process dies because of an exception, 
+    # @subprocess is still true, so this exits the
+    # whole program
     Process.kill("TERM", @subprocess) if @subprocess
     @subprocess = nil
     self
   end
+  alias :end :stop
+  alias :kill :stop
   
   def alive?
     !!@subprocess
