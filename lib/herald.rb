@@ -75,7 +75,12 @@ class Herald
     @subprocess = fork {
       @watchers.each do |watcher|
         watcher.start
-      end      
+      end
+      # all watchers do their tasks in a new thread.
+      # join all thread in this subprocess
+      Thread.list.each do |thread| 
+        thread.join unless thread == Thread.main
+      end
     }
     # if process is not persistant, then
     # wait before the end of this script

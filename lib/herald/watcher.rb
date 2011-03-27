@@ -5,7 +5,7 @@ class Herald
     @@watcher_types = [:imap, :rss, :twitter]
     DEFAULT_TIMER = 60
 
-    attr_reader :notifiers, :keep_alive#, :thread
+    attr_reader :notifiers, :keep_alive, :thread
     attr_accessor :keywords, :timer, :last_look
     
     def initialize(type, keep_alive, options, &block)
@@ -78,17 +78,17 @@ class Herald
       # any pre-tasks are performed before
       prepare()
       # begin loop, which will execute at least once (like a do-while loop)
-#      @thread = Thread.new {
+      @thread = Thread.new {
         begin
           activities
           sleep @timer if @keep_alive
         end while @keep_alive
- #    }
+    }
     end
         
     def stop
       # stop looping
-      @loop = false
+      @keep_alive = false
       # cleanup() is defined in the individual Watcher modules
       cleanup()
     end
