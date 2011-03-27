@@ -5,10 +5,10 @@ class Herald
     @@watcher_types = [:imap, :rss, :twitter]
     DEFAULT_TIMER = 60
 
-    attr_reader :notifiers
-    attr_accessor :watching, :keywords, :timer, :last_look
+    attr_reader :notifiers, :keep_alive#, :thread
+    attr_accessor :keywords, :timer, :last_look
     
-    def initialize(type, options, &block)
+    def initialize(type, keep_alive, options, &block)
       type = type.to_sym
       # TODO this is prepared to handle other protocols, but might not be necessary
       if type == :inbox
@@ -21,6 +21,7 @@ class Herald
       unless @@watcher_types.include?(type)
         raise ArgumentError, "#{type} is not a valid Watcher type"
       end
+      @keep_alive = keep_alive
       @keywords = []
       @notifiers = []
       @timer = Watcher::DEFAULT_TIMER
@@ -40,15 +41,9 @@ class Herald
       @keywords += keywords
     end
     
-    # assign the Notifiers
-    def action(type = nil, options = {}, &block)
-      # if a callback given
-      if block_given?
-        @notifiers << Herald::Watcher::Notifier.new(:callback, options, &block)
-      else
-        # otherwise, assign a Notifier
-        @notifiers << Herald::Watcher::Notifier.new(type, options)
-      end
+    # assign the Notifier
+    def action(type = :callback, options = {}, &block)
+      @notifiers << Herald::Watcher::Notifier.new(type, options, &block)
     end
     
     # parse a hash like { 120 => "seconds" }
@@ -77,18 +72,26 @@ class Herald
     end
     
     def start
+      # set a default Notifier for this Watcher
+      action(Watcher::Notifier::DEFAULT_NOTIFIER) if @notifiers.empty?
       # prepare() is defined in the individual Watcher modules.
       # any pre-tasks are performed before
       prepare()
-      # TODO make new thread loop
       # begin loop, which will execute at least once (like a do-while loop)
-      begin
-        activities
-        sleep @timer if @watching
-      end while @watching
+#      @thread = Thread.new {
+        begin
+          activities
+          sleep @timer if @keep_alive
+        end while @keep_alive
+ #    }
     end
         
-    # (stop() is defined in the individual Watcher modules)
+    def stop
+      # stop looping
+      @loop = false
+      # cleanup() is defined in the individual Watcher modules
+      cleanup()
+    end
     
   end
   
