@@ -6,45 +6,43 @@ require 'herald/notifiers/stdout'
 
 class Herald
 
-  attr_reader :watchers, :watching
+  attr_accessor :watchers, :keep_alive, :subprocess
 
   def self.watch(&block)
-    herald = new(:watching => true, &block)
+    herald = new(&block)
     herald.start
-    herald
   end
   
   def self.once(&block)
-    herald = new(&block)
+    herald = new()
+    herald.keep_alive = false
+    herald.send(:instance_eval, &block)
     herald.start
-    herald
   end
   
-  def self.lazy_load_module(module_path)
-    lazy_load("herald/#{module_path}")
+  # shorthand methods
+  def self.watch_twitter(&block)
+    watch() { check(:twitter, &block) }
+  end
+  def self.watch_rss(options = {}, &block)
+    watch() { check(:twitter, options, &block) }
   end
   
-  # TODO test whether this can be made private
-  def self.lazy_load(path)
-    require(path)
-  end
- 
-#  Shorthand methods? 
-#  def self.watch_twitter(&block); end
-#  def self.watch_rss(&block); end
+  #
+  # instance methods:
+  #
   
-  def initialize(options = {}, &block)
+  def initialize(&block)
     @watchers = []
-    @watching = options.delete(:watching)
+    @keep_alive = true
     if block_given?
-      block.arity == 1 ? yield(self) : instance_eval(&block)
+      instance_eval(&block)
     end
-    # TODO does it matter if @watchers.empty? at this point
   end
   
   # create a new Watcher
   def check(type, options = {}, &block)
-    @watchers << Herald::Watcher.new(type, options, &block)
+    @watchers << Herald::Watcher.new(type, @keep_alive, options, &block)
   end
 
   # send keywords to Watchers
@@ -68,25 +66,45 @@ class Herald
     end
   end
   
-#private
-  
-  # stop Watchers
-  def stop
-    @watchers.each do |watcher|
-      watcher.watching = false
-    end
-  end
-
   # start Watchers
   def start
-    @watchers.each do |watcher|
-      # Watcher will loop for as long as its watching property is true
-      watcher.watching = true if @watching
-      # set a default Notifier for this Watcher
-      watcher.action(Watcher::Notifier::DEFAULT_NOTIFIER) if watcher.notifiers.empty?
-      # start the Watcher
-      watcher.start
+    if @watchers.empty?
+      raise "No watchers assigned"
     end
+    # start watching as a subprocess
+    @subprocess = fork {
+      @watchers.each do |watcher|
+        watcher.start
+      end      
+    }
+    # if process is not persistant, then
+    # wait before the end of this script
+    # for all watchers to finish their jobs
+    Process.waitpid(@subprocess) unless @keep_alive
+    self # return instance object
+  end
+
+  def stop
+    # is there a gentler way of doing it?
+    # or have watchers do cleanup tasks on exit?
+    # look at GOD
+    Process.kill("TERM", @subprocess) if @subprocess
+    @subprocess = nil
+    self
+  end
+  
+  def alive?
+    !!@subprocess
+  end
+    
+private
+  
+  def self.lazy_load_module(module_path)
+    lazy_load("herald/#{module_path}")
+  end
+
+  def self.lazy_load(path)
+    require(path)
   end
 
 end
