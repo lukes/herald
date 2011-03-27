@@ -83,7 +83,7 @@ class Herald
           activities
           sleep @timer if @keep_alive
         end while @keep_alive
-    }
+      }
     end
         
     def stop
