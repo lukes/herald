@@ -26,7 +26,7 @@ class Herald
     watch() { check(:twitter, &block) }
   end
   def self.watch_rss(options = {}, &block)
-    watch() { check(:twitter, options, &block) }
+    watch() { check(:rss, options, &block) }
   end
   
   #
