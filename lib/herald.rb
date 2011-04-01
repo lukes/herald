@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'json'
 
 require 'herald/watcher'
 require 'herald/notifier'

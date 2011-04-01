@@ -9,7 +9,6 @@ class Herald
       # lazy-load net/http when this Module is used
       def self.extended(base)
         Herald.lazy_load('net/http')
-        Herald.lazy_load('json')
       end
 
       def parse_options(options); end
