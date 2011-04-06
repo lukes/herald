@@ -160,6 +160,25 @@ If passed in within the scope of `Herald::Watcher`, it will have access to the p
       end
     end
 
+### Inquisitors
+
+    herald = Herald.watch_rss :from => "http://www.reddit.com/r/pics/.rss?sort=new" do
+      _for "imgur"
+    end
+    # return Time object of the last time Herald checked a source:
+    herald.last_check
+    # return Array of Herald::Watcher objects
+    herald.watchers
+    # which can be edited
+    herald.watchers.first.keywords << "cats"
+    herald.watchers.first.action { puts "callback" }
+    # stop herald from watching
+    herald.stop
+    herald.alive? # => false
+    # begin watching again
+    herald.start
+    herald.alive? # => true
+
 ### Herald Binary [Not Implemented]
 
     herald -watch twitter -for #eqnz
