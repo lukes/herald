@@ -47,8 +47,6 @@ Or an email inbox: [Not Implemented]
       _for "soundofmusic"
     end
 
-In all cases, Herald limits its search to the first 100 items.
-
 ### Watching multiple sources, or for multiple keywords
 
 Watching two RSS feeds and Twitter for two keywords
