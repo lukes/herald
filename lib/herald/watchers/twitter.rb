@@ -4,7 +4,7 @@ class Herald
     # TODO, ignore retweets, if option passed
     module Twitter
 
-      attr_reader :uri, :last_tweet_id
+      attr_accessor :uri, :last_tweet_id
 
       # lazy-load net/http when this Module is used
       def self.extended(base)
