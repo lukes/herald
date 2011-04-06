@@ -6,6 +6,8 @@ require 'herald/notifier'
 require 'herald/notifiers/stdout'
 require 'herald/item'
 
+# TODO catch and report on exceptions in subprocess, or thread,
+# when exception has killed a subprocess, remove it from @subprocess
 class Herald
 
   attr_accessor :watchers, :keep_alive, :subprocess

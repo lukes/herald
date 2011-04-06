@@ -3,7 +3,7 @@ class Herald
 
     module Imap
 
-      attr_reader :user, :pass, :host, :mailbox, :last_uid
+      attr_accessor :user, :pass, :host, :mailbox, :last_uid
 
       # lazy-load net/imap when this Module is used
       def self.extended(base)
