@@ -3,7 +3,7 @@ class Herald
 
     module Rss
 
-      attr_reader :uris, :last_item
+      attr_accessor :uris, :published_time_of_last_rss_item
       
       # lazy-load net/http and rss when this Module is used
       def self.extended(base)
@@ -36,18 +36,22 @@ class Herald
           return if rss.nil?
           # remove items that are older than the last item found
           # and don't contain the keywords being looked for
-          rss.items.delete_if { |item|
-            return true if @last_item && defined?(item.pubDate) && item.pubDate < @last_item
+          rss.items.delete_if do |item|
+            delete = true
             @keywords.each do |keyword|
-              return true if !(item.title + item.description).include?(keyword)
+              delete = false if (item.title + item.description).include?(keyword)
             end
-            false        
-          }
+            if @published_time_of_last_rss_item && defined?(item.pubDate) && item.pubDate <= @published_time_of_last_rss_item
+              delete = true
+            end
+            delete
+          end
           return if rss.items.empty?
-          @last_item = rss.items.last.pubDate rescue nil
+          @published_time_of_last_rss_item = rss.items.last.pubDate rescue nil
+          puts "#{@published_time_of_last_rss_item} <- last item"
           rss.items.each do |item|
-            title = self.title rescue nil
-            description = self.description rescue nil
+            title = item.title rescue nil
+            description = item.description rescue nil
             notify(Item.new(title, description, Herald::Item.to_json(:rss, item)))
           end
         end
