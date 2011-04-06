@@ -40,7 +40,7 @@ Or an RSS feed:
       _for "soundofmusic"
     end
 
-Or an email inbox:
+Or an email inbox: [Not Implemented]
 
     Herald.watch do
       check :inbox, :imap => "imap.server.com", :user => "username", :pass => "supersecret"
@@ -82,7 +82,8 @@ Swap in another action by passing Herald one of the following `action` parameter
 
 To use Growl, enable "Listen for incoming notifications" and "Allow remote application registration" on the [Network tab](http://growl.info/documentation/exploring-preferences.php) of the Growl Preference Panel, and pass Herald `action :growl`:
 
-    Herald.watch_twitter_for("herald", "ruby") do
+    Herald.watch_twitter do
+      _for "herald", "ruby"
       action :growl
     end
 
@@ -90,7 +91,8 @@ To use Growl, enable "Listen for incoming notifications" and "Allow remote appli
 
 To ping a URI, pass Herald `action :ping, :uri => "http://address.to.ping"`:
 
-    Herald.watch_twitter_for("#yaks", "#in", "#space") do
+    Herald.watch_twitter do
+      _for "#yaks", "#in", "#space"
       action :ping, :uri => "http://mycounter.com/+1"
     end
     
@@ -98,7 +100,8 @@ To ping a URI, pass Herald `action :ping, :uri => "http://address.to.ping"`:
 
 To post information about what Herald finds to a URI, pass Herald `action :post, :uri => "http://address.to.post.to"`:
 
-    Herald.watch_twitter_for("#yaks", "#in", "#space") do
+    Herald.watch_twitter do
+      _for "#yaks", "#in", "#space"
       action :post, :uri => "http://yakdb.com/post"
     end
     
@@ -106,7 +109,8 @@ To post information about what Herald finds to a URI, pass Herald `action :post,
 
 If you'd like to do your own thing entirely each time a keyword appears, pass a callback in the form of a Ruby block:
 
-    Herald.watch_twitter_for("revolution") do
+    Herald.watch_twitter do
+      _for "revolution"
       action do
         `say "Viva!"`
       end
@@ -138,7 +142,8 @@ Callbacks allow a great deal of reflection into the internals of Herald.
 
 If the callback is passed with the scope of `Herald`, it will have access to the `Herald` instance variables:
 
-    Herald.watch_twitter :for => "#breaking", "news" do
+    Herald.watch_twitter do
+      _for "#breaking", "news"
       action do
         puts instance_variables
       end
@@ -157,7 +162,9 @@ If passed in within the scope of `Herald::Watcher`, it will have access to the p
 
 ### For inquisitive minds
 
-    herald = Herald.watch_rss_for("imgur") :from => "http://www.reddit.com/r/pics/.rss?sort=new"
+    herald = Herald.watch_rss :from => "http://www.reddit.com/r/pics/.rss?sort=new" do
+      _for "imgur"
+    end
     # return Array of Herald::Watcher objects
     herald.watchers
     # which can be edited
