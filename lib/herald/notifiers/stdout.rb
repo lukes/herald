@@ -16,7 +16,7 @@ class Herald
 
         # print to $stdout
         def notify(item)
-          $stdout.puts item.data
+          $stdout.puts item.data.inspect
           $stdout.flush
         end
 

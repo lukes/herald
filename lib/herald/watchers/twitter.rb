@@ -29,17 +29,21 @@ class Herald
 
       def cleanup; end
       
+      def to_s
+        "Herald Twitter Watcher, Keywords: '#{@keywords}', Timer: #{@timer}, State: #{@keep_alive ? 'Watching' : 'Stopped'}"
+      end
+      
     private
 
       def activities
         # return response as string from Twitter
         json = Net::HTTP.get(URI.parse(@uri.join("&")))
         # and parse it to JSON
-        json = JSON.parse(json)
+        json = Crack::JSON.parse(json)
         # will be nil if there are no results
-        return if json['results'].nil?
+        return if json["results"].nil?
         @last_tweet_id = json["max_id"]
-        json['results'].each do |tweet|
+        json["results"].each do |tweet|
           notify(Item.new("@#{tweet['from_user']}", tweet['text'], json['results']))
         end
         @uri = [@uri.first, "since_id=#{@last_tweet_id}"]

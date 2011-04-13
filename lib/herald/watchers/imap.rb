@@ -24,6 +24,10 @@ class Herald
       def prepare; end
       def cleanup; end
       
+      def to_s
+        "Herald IMAP Watcher, Host: #{@host}, Keywords: '#{@keywords}', Timer: #{@timer}, State: #{@keep_alive ? 'Watching' : 'Stopped'}"
+      end
+      
     private
 
       def activities
