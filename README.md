@@ -159,31 +159,33 @@ If passed in within the scope of `Herald::Watcher`, it will have access to the p
 
 ### For inquisitive minds
 
-    herald = Herald.watch_rss :from => "view-source:http://www.reddit.com/r/pics/new/.rss" do
+    herald = Herald.watch_rss :from => "http://www.reddit.com/r/pics/new/.rss" do
       _for "imgur"
     end
-    # return Array of Herald::Watcher objects
+
+Edit your herald instance
+
     herald.watchers
-    # in simple english
-    herald.watchers.to_s
-    # which can be edited
+    herald.watchers.to_s # in English
     herald.watchers.first.keywords << "cats"
     herald.watchers.first.action { puts "callback" }
-    # stop herald from watching
+
+Stop and start herald from watching
+
     herald.stop
     herald.alive? # => false
-    # begin watching again
     herald.start
-    # start a second herald
+
+Start a second herald
+
     herald_the_second = Herald.watch_twitter { _for "#herald" }
-    # both heralds can can be inspected as a batch
+
+Use `Herald` class methods to inspect and edit heralds as a batch
+
     Herald.heralds
     Herald.heralds.to_s
-    # and can be stopped as a batch
-    Herald.stop
-    Herald.heralds.size # => 0
-    # and restarted as a batch
-    Herald.start
+    Herald.stop # both heralds stopped
+    Herald.start # both heralds restarted
 
 ### Herald Binary [Not Implemented]
 
