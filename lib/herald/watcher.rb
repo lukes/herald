@@ -5,7 +5,7 @@ class Herald
     @@watcher_types = [:rss, :twitter] # :imap
     DEFAULT_TIMER = 60
 
-    attr_reader :keep_alive, :thread, :latest_items
+    attr_reader :keep_alive, :thread, :items
     attr_accessor :notifiers, :keywords, :timer
     
     def initialize(type, keep_alive, options, &block)
@@ -24,7 +24,7 @@ class Herald
       @keep_alive = keep_alive
       @keywords = []
       @notifiers = []
-      @latest_items = []
+      @items = []
       @timer = Watcher::DEFAULT_TIMER
       Herald.lazy_load_module("watchers/#{type}")
       # extend class with module
