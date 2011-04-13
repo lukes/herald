@@ -177,12 +177,14 @@ If passed in within the scope of `Herald::Watcher`, it will have access to the p
     herald.start
     # start a second herald
     herald_the_second = Herald.watch_twitter { _for "#herald" }
-    # which can be inspected
+    # both heralds can can be inspected as a batch
     Herald.heralds
     Herald.heralds.to_s
-    # and can be all stopped
+    # and can be stopped as a batch
     Herald.stop
     Herald.heralds.size # => 0
+    # and restarted as a batch
+    Herald.start
 
 ### Herald Binary [Not Implemented]
 
