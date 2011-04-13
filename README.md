@@ -52,7 +52,7 @@ Or an email inbox: [Not Implemented]
 Watching two RSS feeds and Twitter for two keywords
 
     Herald.watch do
-      check :rss, :from => ["http://example.com/one.rss", "http://example.com/two.rss"]
+      check :rss, :from => ["http://earthquakes.com/.rss", "http://news.com/.rss"]
       check :twitter
       _for "christchurch", "earthquake"
     end
@@ -60,8 +60,8 @@ Watching two RSS feeds and Twitter for two keywords
 Or, if sources should have different keywords
 
     Herald.watch do    
-    check :rss, :from => "http://rss.nzherald.co.nz/rss/xml/nzhrsscid_000000001.xml"
-        _for "christchurch", "earthquake"
+      check :rss, :from => "http://earthquake.usgs.gov/earthquakes/catalogs/eqs1day-M0.xml"
+        _for "christchurch"
       end
       check :twitter do
         _for "#eqnz", "#chch", "#quake"
@@ -119,8 +119,7 @@ If you'd like to do your own thing entirely each time a keyword appears, pass a 
 By default Herald will sleep for 1 minute after checking each of the sources independently. 
 To set a different sleep time:
 
-    Herald.watch do
-      check :twitter
+    Herald.watch_twitter do
       _for "soundofmusic"
       every 30 => "seconds" # or "minutes", "hours", or "days"
     end
