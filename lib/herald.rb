@@ -33,17 +33,19 @@ class Herald
   end
 
   def self.stop
-    # is there a gentler way of doing it?
-    # or have watchers do cleanup tasks on exit?
-    # look at GOD
-    # TODO, if process dies because of an exception, 
-    # @@heralds is still true, so this exits the
-    # whole program
     return false if @@heralds.empty?
     @@heralds.each do |herald|
       herald.stop
     end
-    @@heralds.clear
+#    @@heralds.clear
+    true
+  end
+  
+  def self.start
+    return false if @@heralds.empty?
+    @@heralds.each do |herald|
+      herald.start
+    end
     true
   end
   
@@ -118,6 +120,12 @@ class Herald
     self # return instance object
   end
 
+  # is there a gentler way of doing it?
+  # or have watchers do cleanup tasks on exit?
+  # look at GOD
+  # TODO, if process dies because of an exception, 
+  # @@heralds is still true, so this exits the
+  # whole program
   def stop
     Process.kill("TERM", @subprocess) if @subprocess
     self
