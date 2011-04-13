@@ -3,3 +3,7 @@
 - Best way to require gems? Can I vendorise crack gem?
 
 - Suppress Growl text on test()
+
+- Comment in RDOC
+
+- Handle exceptions in processes, by reporting the error, then set the @subprocess to nil

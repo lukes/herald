@@ -123,11 +123,9 @@ class Herald
   # is there a gentler way of doing it?
   # or have watchers do cleanup tasks on exit?
   # look at GOD
-  # TODO, if process dies because of an exception, 
-  # @@heralds is still true, so this exits the
-  # whole program
   def stop
     Process.kill("TERM", @subprocess) if @subprocess
+    @subprocess = nil
     self
   end
   alias :end :stop
@@ -153,8 +151,7 @@ private
 
 end
 
-# queue a block to always stop
-# forked processes on exit
+# queue a block to always stop all forked processes on exit
 at_exit do
   Herald.stop 
 end
