@@ -5,20 +5,16 @@ class Herald
 
       attr_accessor :uris
       
-      # lazy-load net/http and rss when this Module is used
+      # lazy-load open-uri when this Module is used
       def self.extended(base)
-        Herald.lazy_load('net/http')
-#        %w(net/http rss/0.9 rss/1.0 rss/2.0 rss/parser).each do |lib|
-#          Herald.lazy_load(lib)
-#        end
+        Herald.lazy_load('open-uri')
       end
       
       def parse_options(options)
-        @uris = options.delete(:from).to_a
+        @uris = Array(options.delete(:from))
         if @uris.empty?
           raise ArgumentError, "RSS source not specified in :from Hash"
         end
-        @uris.map! { |uri| URI.parse(uri) }
       end
 
       def prepare; end
@@ -34,29 +30,31 @@ class Herald
         @uris.each do |uri|
           # return response as string and parse to RSS
           begin
-            rss = Crack::XML.parse(Net::HTTP.get(uri))
+            rss = Crack::XML.parse(open(uri).read)
           rescue
             return
           end
-          return if rss.nil?
+          # skip if rss variable is nil, or is missing
+          # rss elements in the expected nested format
+          next unless defined?(rss["rss"]["channel"]["item"])
           # ignore items that have been part of a notification round
           # or that don't contain the keywords being looked for
           items = []
           rss["rss"]["channel"]["item"].each do |item|
             # if we've already seen this item, skip to next item
-            if @latest_items.include?(item)
+            if @items.include?(item)
               next
             end
             # keep this item if it contains keywords in the title or description
-            if (item["title"] + item["description"]).match(/#{@keywords.join('|')}/i)
+            if "#{item["title"]}#{item["description"]}".match(/#{@keywords.join('|')}/i)
               items << item
             end
           end
           return if items.empty?
-          @latest_items = items
-          @latest_items.each do |item|
+          items.each do |item|
             notify(Item.new(item["title"], item["description"], item))
           end
+          @items += items
         end
       end
 
