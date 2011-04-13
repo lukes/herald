@@ -1,0 +1,5 @@
+- Catch and report on exceptions in @@subprocess, or thread, when exception has killed a @@subprocess, remove it from @@subprocess
+
+- Best way to require gems? Can I vendorise crack gem?
+
+- Suppress Growl text on test()
