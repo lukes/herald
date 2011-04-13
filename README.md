@@ -59,8 +59,8 @@ Watching two RSS feeds and Twitter for two keywords
 
 Or, if sources should have different keywords
 
-    Herald.watch do
-      check :rss, :from => ["http://example.com/one.rss", "http://example.com/two.rss"] do
+    Herald.watch do    
+    check :rss, :from => "http://rss.nzherald.co.nz/rss/xml/nzhrsscid_000000001.xml"
         _for "christchurch", "earthquake"
       end
       check :twitter do
@@ -138,7 +138,7 @@ Rather than watching, if you just want to get a single poll of keywords, use `on
 
 Callbacks allow a great deal of reflection into the internals of Herald.
 
-If the callback is passed with the scope of `Herald`, it will have access to the `Herald` instance variables:
+If the callback is passed with the scope of `Herald`, it will have access to the `Herald` methods and instance variables:
 
     Herald.watch_twitter do
       _for "#breaking", "news"
@@ -147,7 +147,7 @@ If the callback is passed with the scope of `Herald`, it will have access to the
       end
     end
   
-If passed in within the scope of `Herald::Watcher`, it will have access to the particular `Watcher`'s instance variables:
+If passed in within the scope of `Herald::Watcher`, it will have access to the particular `Watcher`'s methods and instance variables:
   
     Herald.watch do
       check :twitter do
@@ -160,11 +160,13 @@ If passed in within the scope of `Herald::Watcher`, it will have access to the p
 
 ### For inquisitive minds
 
-    herald = Herald.watch_rss :from => "http://www.reddit.com/r/pics/.rss?sort=new" do
+    herald = Herald.watch_rss :from => "view-source:http://www.reddit.com/r/pics/new/.rss" do
       _for "imgur"
     end
     # return Array of Herald::Watcher objects
     herald.watchers
+    # in simple english
+    herald.watchers.to_s
     # which can be edited
     herald.watchers.first.keywords << "cats"
     herald.watchers.first.action { puts "callback" }
@@ -173,6 +175,14 @@ If passed in within the scope of `Herald::Watcher`, it will have access to the p
     herald.alive? # => false
     # begin watching again
     herald.start
+    # start a second herald
+    herald_the_second = Herald.watch_twitter { _for "#herald" }
+    # which can be inspected
+    Herald.heralds
+    Herald.heralds.to_s
+    # and can be all stopped
+    Herald.stop
+    Herald.heralds.size # => 0
 
 ### Herald Binary [Not Implemented]
 

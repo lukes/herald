@@ -1,20 +1,20 @@
 require 'rubygems'
-require 'json'
+#require 'json'
+gem 'crack'
+require 'crack'
 
 require 'herald/watcher'
 require 'herald/notifier'
 require 'herald/notifiers/stdout'
 require 'herald/item'
 
-# TODO catch and report on exceptions in subprocess, or thread,
-# when exception has killed a subprocess, remove it from @subprocess
 class Herald
 
+  @@heralds = []
   attr_accessor :watchers, :keep_alive, :subprocess
 
   def self.watch(&block)
-    herald = new(&block)
-    herald.start
+    new(&block).start
   end
   
   def self.once(&block)
@@ -31,6 +31,25 @@ class Herald
   def self.watch_rss(options = {}, &block)
     watch() { check(:rss, options, &block) }
   end
+
+  def self.stop
+    # is there a gentler way of doing it?
+    # or have watchers do cleanup tasks on exit?
+    # look at GOD
+    # TODO, if process dies because of an exception, 
+    # @@heralds is still true, so this exits the
+    # whole program
+    return false if @@heralds.empty?
+    @@heralds.each do |herald|
+      herald.stop
+    end
+    @@heralds.clear
+    true
+  end
+  
+  def self.heralds
+    @@heralds
+  end
   
   #
   # instance methods:
@@ -42,6 +61,8 @@ class Herald
     if block_given?
       instance_eval(&block)
     end
+    @@heralds << self
+    self
   end
   
   # create a new Watcher
@@ -75,13 +96,13 @@ class Herald
     if @watchers.empty?
       raise "No watchers assigned"
     end
-    # start watching as a subprocess
+    # start watching as a @subprocess
     @subprocess = fork {
       @watchers.each do |watcher|
         watcher.start
       end
       # all watchers do their tasks in a new thread.
-      # join all thread in this subprocess
+      # join all thread in this @subprocess
       Thread.list.each do |thread| 
         thread.join unless thread == Thread.main
       end
@@ -98,14 +119,7 @@ class Herald
   end
 
   def stop
-    # is there a gentler way of doing it?
-    # or have watchers do cleanup tasks on exit?
-    # look at GOD
-    # TODO, if process dies because of an exception, 
-    # @subprocess is still true, so this exits the
-    # whole program
     Process.kill("TERM", @subprocess) if @subprocess
-    @subprocess = nil
     self
   end
   alias :end :stop
@@ -113,6 +127,10 @@ class Herald
   
   def alive?
     !!@subprocess
+  end
+  
+  def to_s
+    "#{alive? ? 'Alive' : 'Stopped'}Alive"
   end
     
 private
@@ -125,4 +143,10 @@ private
     require(path)
   end
 
+end
+
+# queue a block to always stop
+# forked processes on exit
+at_exit do
+  Herald.stop 
 end
