@@ -52,7 +52,7 @@ Or an email inbox: [Not Implemented]
 Watching two RSS feeds and Twitter for two keywords
 
     Herald.watch do
-      check :rss, :from => ["http://earthquakes.com/.rss", "http://news.com/.rss"]
+      check :rss, :from => ["http://earthquakes.gov/.rss", "http://livenews.com/.rss"]
       check :twitter
       _for "christchurch", "earthquake"
     end
@@ -81,7 +81,7 @@ Swap in another action by passing Herald one of the following `action` parameter
 To use Growl, enable "Listen for incoming notifications" and "Allow remote application registration" on the [Network tab](http://growl.info/documentation/exploring-preferences.php) of the Growl Preference Panel, and pass Herald `action :growl`:
 
     Herald.watch_twitter do
-      _for "herald", "ruby"
+      _for "nz", "#election"
       action :growl
     end
 
@@ -91,7 +91,7 @@ To ping a URI, pass Herald `action :ping, :uri => "http://address.to.ping"`:
 
     Herald.watch_twitter do
       _for "#yaks", "#in", "#space"
-      action :ping, :uri => "http://mycounter.com/+1"
+      action :ping, :uri => "http://counter.com/+1"
     end
     
 #### Post
