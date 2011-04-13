@@ -49,6 +49,10 @@ class Herald
     true
   end
   
+  def self.alive?
+    @@heralds.any? { |h| h.alive? }
+  end
+  
   def self.heralds
     @@heralds
   end
