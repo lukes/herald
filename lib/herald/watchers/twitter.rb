@@ -5,7 +5,8 @@ class Herald
     module Twitter
 
       attr_accessor :uri, :last_tweet_id
-
+      TWITTER_API = "http://search.twitter.com/search.json"
+      
       # lazy-load open-uri when this Module is used
       def self.extended(base)
         Herald.lazy_load('open-uri')
@@ -15,10 +16,15 @@ class Herald
       
       # executed before Watcher starts
       def prepare
+        # twitter doesn't allow you to query its api without
+        # providing a query string
+        if @keywords.empty?
+          raise ArgumentError, "Keywords are missing"
+        end
         # initialise array, first element will be the Twitter API with search query string, 
         # the second element will be a "since_id" extra query parameter, added at close of 
         # activities() loop
-        @uri = ["http://search.twitter.com/search.json?q=#{@keywords.join('+')}"]
+        @uri = ["#{TWITTER_API}?q=#{@keywords.join('+')}"]
       end
 
       def cleanup; end
