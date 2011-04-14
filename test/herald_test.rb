@@ -1,5 +1,3 @@
-#require File.dirname(__FILE__) + '/helper'
-
 describe Herald do
   before do
     @herald = Herald.watch { check :twitter; _for "test" }
@@ -10,7 +8,7 @@ describe Herald do
   end
   
   describe "initialisation with watchers" do
-    it "must throw an acception if no watcher param is in the block" do
+    it "must throw an acception if no watcher param is given" do
       assert_raises(RuntimeError) do
         Herald.watch {}
       end
@@ -44,7 +42,6 @@ describe Herald do
     end
     it "must assign an rss watcher" do
       herald = Herald.watch { check :rss, :from => "http://example.com" }
-      herald.watchers.size.must_equal(1)
       herald.watchers.first.type.must_equal(:rss)
     end
   end
@@ -52,6 +49,7 @@ describe Herald do
   describe "initialisation with keywords" do
     it "must assign keyword when passed as a string" do
       @herald.watchers.first.keywords.must_be_kind_of(Array)
+      @herald.watchers.first.keywords.size.must_equal(1)
       @herald.watchers.first.keywords.to_s.must_equal("test")
     end
     it "must slurp keywords when passed as a multiargument strings" do
