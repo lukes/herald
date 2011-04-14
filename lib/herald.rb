@@ -57,6 +57,12 @@ class Herald
     @@heralds.clear
     true
   end
+  
+  # just walk away, leaving whatever strays to themselves
+  def self.demonize!
+    @@heralds.clear
+    true
+  end
     
   def self.alive?
     @@heralds.any? { |h| h.alive? }

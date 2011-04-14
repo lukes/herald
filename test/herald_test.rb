@@ -1,3 +1,5 @@
+# start tests by 'rake test' on root path
+
 describe Herald do
   before do
     @herald = Herald.watch { check :twitter; _for "test" }

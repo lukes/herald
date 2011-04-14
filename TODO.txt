@@ -7,3 +7,6 @@
 - Comment in RDOC
 
 - Handle exceptions in processes, by reporting the error, then set the @subprocess to nil
+
+- Look at Gemspec
+  - Show dependency on ruby-growl if installed for mac

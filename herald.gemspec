@@ -9,16 +9,16 @@ Gem::Specification.new do |s|
   s.authors     = ["Luke Duncalfe"]
   s.email       = ["herald-gem@alltheworld.co.nz"]
   s.homepage    = "http://github.com/lukes/herald"
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{A simple notifier for Twitter, RSS, or email}
+  s.description = %q{Pass Herald some keywords and sources to watch, and Herald will notify you using Growl, email, pinging a site, or running Ruby code as soon as those keywords appear}
 
   s.required_rubygems_version = ">= 1.3.6" # TODO test earliest dependency
-  s.add_dependency('json')
+  s.add_development_dependency "minitest"
+  s.add_dependency "crack"
   s.rubyforge_project         = "herald"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- test/*`.split("\n")
+#  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 end
-
-# TODO - show dependency on ruby-growl if installed for mac
