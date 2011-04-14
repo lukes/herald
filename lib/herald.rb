@@ -32,15 +32,7 @@ class Herald
     watch() { check(:rss, options, &block) }
   end
 
-  def self.stop
-    return false if @@heralds.empty?
-    @@heralds.each do |herald|
-      herald.stop
-    end
-#    @@heralds.clear
-    true
-  end
-  
+  # batch methods
   def self.start
     return false if @@heralds.empty?
     @@heralds.each do |herald|
@@ -48,7 +40,24 @@ class Herald
     end
     true
   end
+
+  def self.stop
+    return false unless Herald.alive?
+    @@heralds.each do |herald|
+      herald.stop
+    end
+    true
+  end
   
+  # stop all heralds, and remove them
+  # from list of herald instances. mostly
+  # useful for clearing @@heralds when testing
+  def self.clear
+    stop()
+    @@heralds.clear
+    true
+  end
+    
   def self.alive?
     @@heralds.any? { |h| h.alive? }
   end
@@ -102,6 +111,8 @@ class Herald
     if @watchers.empty?
       raise "No watchers assigned"
     end
+    # if herald is already running, first stop
+    stop() if alive?
     # start watching as a @subprocess
     @subprocess = fork {
       @watchers.each do |watcher|
