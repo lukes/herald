@@ -12,10 +12,17 @@ Gem::Specification.new do |s|
   s.summary     = %q{A simple notifier for Twitter, RSS, or email}
   s.description = %q{A simple and flexible notifier for Twitter, RSS, or email}
 
-  s.required_rubygems_version = ">= 1.3.6" # TODO test earliest dependency
-  s.add_development_dependency "minitest"
-  s.add_dependency "crack"
-  s.rubyforge_project         = "herald"
+#  s.required_rubygems_version = ">= 1.3.6" # TODO test earliest dependency
+  s.add_development_dependency("minitest")
+  s.add_dependency("crack")
+  # if gem is being installed on a mac, add a dependency on ruby-growl.
+  # note, this is not a fool-proof method of detecting the OS,
+  # apparently if return "java" if platform is JRuby
+  if RUBY_PLATFORM.downcase.include?("darwin")
+    s.add_dependency("ruby-growl", "~> 3.0")
+  end
+
+  s.rubyforge_project = "herald"
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- test/*`.split("\n")
