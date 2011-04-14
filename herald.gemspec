@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.email       = ["lduncalfe@eml.cc"]
   s.homepage    = "http://github.com/lukes/herald"
   s.summary     = %q{A simple notifier for Twitter, RSS, or email}
-  s.description = %q{Pass Herald some keywords and sources to watch, and Herald will notify you using Growl, email, pinging a site, or running Ruby code as soon as those keywords appear}
+  s.description = %q{A simple and flexible notifier for Twitter, RSS, or email}
 
   s.required_rubygems_version = ">= 1.3.6" # TODO test earliest dependency
   s.add_development_dependency "minitest"
