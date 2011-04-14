@@ -8,7 +8,7 @@ describe Herald do
   end
   
   describe "initialisation with watchers" do
-    it "must throw an acception if no watcher param is given" do
+    it "must throw an acception if no 'check' param is given" do
       assert_raises(RuntimeError) do
         Herald.watch {}
       end
