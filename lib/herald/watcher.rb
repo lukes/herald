@@ -5,30 +5,30 @@ class Herald
     @@watcher_types = [:rss, :twitter] # :imap
     DEFAULT_TIMER = 60
 
-    attr_reader :keep_alive, :thread, :items
+    attr_reader :type, :keep_alive, :thread, :items
     attr_accessor :notifiers, :keywords, :timer
     
     def initialize(type, keep_alive, options, &block)
-      type = type.to_sym
+      @type = type.to_sym
       # TODO this is prepared to handle other protocols, but might not be necessary
-#      if type == :inbox
+#      if @type == :inbox
 #        if options.key?(:imap)
-#          type = :imap
+#          @type = :imap
 #          options[:host] = options[:imap]
 #        end
 #      end
       # check watcher type
-      unless @@watcher_types.include?(type)
-        raise ArgumentError, "#{type} is not a valid Watcher type"
+      unless @@watcher_types.include?(@type)
+        raise ArgumentError, "#{@type} is not a valid Watcher type"
       end
       @keep_alive = keep_alive
       @keywords = []
       @notifiers = []
       @items = []
       @timer = Watcher::DEFAULT_TIMER
-      Herald.lazy_load_module("watchers/#{type}")
+      Herald.lazy_load_module("watchers/#{@type}")
       # extend class with module
-      send(:extend, eval(type.to_s.capitalize))
+      send(:extend, eval(@type.to_s.capitalize))
       # each individual Watcher will handle their options
       parse_options(options)
       # eval the block, if given
@@ -39,7 +39,7 @@ class Herald
     end
     
     def _for(*keywords)
-      @keywords += keywords
+      @keywords += keywords.flatten
     end
     
     # assign the Notifier
