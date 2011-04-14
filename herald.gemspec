@@ -23,9 +23,11 @@ Gem::Specification.new do |s|
   end
 
   s.rubyforge_project = "herald"
+  s.extra_rdoc_files = ["README.md", "LICENSE"]
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- test/*`.split("\n")
 #  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+# s.default_executable = "herald"
   s.require_paths = ["lib"]
 end
