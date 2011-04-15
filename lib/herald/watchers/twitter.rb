@@ -4,8 +4,9 @@ class Herald
     # TODO, ignore retweets, if option passed
     module Twitter
 
-      attr_accessor :uri, :last_tweet_id
       TWITTER_API = "http://search.twitter.com/search.json"
+
+      attr_accessor :uri, :last_tweet_id
       
       # lazy-load open-uri when this Module is used
       def self.extended(base)

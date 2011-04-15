@@ -5,6 +5,7 @@ class Herald
       module Growl
 
         @@notification_type = "Herald Notification"
+        
         attr_accessor :growl, :sticky
 
         def self.extended(base)
