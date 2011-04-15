@@ -160,17 +160,18 @@ Use `Herald` class methods to inspect and edit heralds as a batch
             
 ### Look Once
 
-Rather than watching, if you just want to get a single poll of keywords, use `once()`. All the same parameters as with `watch()` can be used (except `every`).
+Rather than watching, if you just want to get a single poll of keywords, use `once()`. All the same parameters as with `watch()` can be used (`every` will be ignored).
 
     herald = Herald.once do
       check :twitter
       _for "#herald"
     end
-    
+
+As with watching, Herald will fork a new process (or one for every source you're `check`ing), but unlike with watching, Herald will wait for the process to finish.
+
+    herald.start # herald will block and wait for a result
     herald.alive? # => false
-    herald.start
-    herald.alive? # => false
-    
+
 ### Callback Scope and Herald Metaprogramming
 
 Callbacks allow a great deal of reflection into the internals of Herald.
