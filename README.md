@@ -5,6 +5,11 @@ Herald is a simple notifier for Twitter, RSS, or email.
 
 Pass Herald some keywords and sources to watch, and Herald will notify you using Growl, email, pinging a site, or running Ruby code as soon as those keywords appear.
 
+Compatibility
+-------------
+
+Mac and linux only (due to difficulty in managing Windows processes).
+
 Installation
 ------------
 
@@ -21,26 +26,26 @@ Installation
 Usage
 -----
 
-First step is to `require` Herald into your Ruby project:
+First step is to `require` Herald into your Ruby project
 
     require 'rubygems'
     require 'herald'
 
-Then, to watch for tweets containing "soundofmusic":
+Then, to watch for tweets containing "soundofmusic"
 
     Herald.watch do
       check :twitter
       _for "soundofmusic"
     end
 
-Or an RSS feed:
+Or an RSS feed
 
     Herald.watch do
       check :rss, :from => "http://example.com/.rss"
       _for "soundofmusic"
     end
 
-Or an email inbox: [Not Implemented]
+Or an email inbox [Not Implemented]
 
     Herald.watch do
       check :inbox, :imap => "imap.server.com", :user => "username", :pass => "supersecret"
@@ -78,7 +83,7 @@ Swap in another action by passing Herald one of the following `action` parameter
 
 [Growl](http://growl.info/) is a notification system for Mac OS X.
 
-To use Growl, enable "Listen for incoming notifications" and "Allow remote application registration" on the [Network tab](http://growl.info/documentation/exploring-preferences.php) of the Growl Preference Panel, and pass Herald `action :growl`:
+To use Growl, enable "Listen for incoming notifications" and "Allow remote application registration" on the [Network tab](http://growl.info/documentation/exploring-preferences.php) of the Growl Preference Panel, and pass Herald `action :growl`
 
     Herald.watch_twitter do
       _for "nz", "#election"
@@ -87,7 +92,7 @@ To use Growl, enable "Listen for incoming notifications" and "Allow remote appli
 
 #### Ping
 
-To ping a URI, pass Herald `action :ping, :uri => "http://address.to.ping"`:
+To ping a URI, pass Herald `action :ping, :uri => "http://address.to.ping"`
 
     Herald.watch_twitter do
       _for "#fundamentalists", "#in", "#space"
@@ -96,7 +101,7 @@ To ping a URI, pass Herald `action :ping, :uri => "http://address.to.ping"`:
     
 #### Post
 
-To post information about what Herald finds to a URI, pass Herald `action :post, :uri => "http://address.to.post.to"`:
+To post information about what Herald finds to a URI, pass Herald `action :post, :uri => "http://address.to.post.to"`
 
     Herald.watch_twitter do
       _for "vanity", "tweeting"
@@ -105,7 +110,7 @@ To post information about what Herald finds to a URI, pass Herald `action :post,
     
 #### Callbacks
 
-If you'd like to do your own thing entirely each time a keyword appears, pass a callback in the form of a Ruby block:
+If you'd like to do your own thing entirely each time a keyword appears, pass a callback in the form of a Ruby block
 
     Herald.watch_twitter do
       _for "revolution"
@@ -117,7 +122,7 @@ If you'd like to do your own thing entirely each time a keyword appears, pass a 
 ### Timer
 
 By default Herald will sleep for 1 minute after checking each of the sources independently. 
-To set a different sleep time:
+To set a different sleep time
 
     Herald.watch_twitter do
       _for "soundofmusic"
@@ -158,14 +163,14 @@ Use the `Herald` class methods to inspect and edit your heralds as a batch
             
 ### Look once
 
-Rather than watching, if you just want to get a single poll of keywords, use `once()`. All the same parameters as with `watch()` can be used (`every` will be ignored).
+Rather than watching, if you just want to get a single poll of keywords, use `once()`. All the same parameters as with `watch()` can be used (`every` will be ignored)
 
     herald = Herald.once do
       check :twitter
       _for "#herald"
     end
 
-As with watching, Herald will fork a new process (or one for every source you're `check`ing), but unlike with watching, Herald will block and wait for the process to finish.
+As with watching, Herald will fork a new process (or one for every source you're `check`ing), but unlike with watching, Herald will block and wait for the process to finish
 
     herald.start # waiting ... process ends at the same time you get a result
     herald.alive? # => false
@@ -174,7 +179,7 @@ As with watching, Herald will fork a new process (or one for every source you're
 
 Callbacks allow a great deal of reflection into the internals of Herald.
 
-If the callback is passed with the scope of `Herald`, it will have access to the `Herald` methods and instance variables:
+If the callback is passed with the scope of `Herald`, it will have access to the `Herald` methods and instance variables
 
     Herald.watch_twitter do
       _for "#breaking", "news"
@@ -183,7 +188,7 @@ If the callback is passed with the scope of `Herald`, it will have access to the
       end
     end
   
-If passed in within the scope of `Herald::Watcher`, it will have access to the particular `Watcher`'s methods and instance variables:
+If passed in within the scope of `Herald::Watcher` (`action` agents), it will have access to the particular `Watcher`'s methods and instance variables
   
     Herald.watch do
       check :twitter do
