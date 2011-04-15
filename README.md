@@ -143,7 +143,7 @@ Edit your herald instance while it's working
     herald.watchers.first.keywords << "cats"
     herald.watchers.first.action { puts "callback" }
 
-Stop and start herald
+Stop and start the herald
 
     herald.stop
     herald.alive? # => false
@@ -171,7 +171,7 @@ Rather than watching, if you just want to get a single poll of keywords, use `on
 
 As with watching, Herald will fork a new process (or one for every source you're `check`ing), but unlike with watching, Herald will block and wait for the process to finish
 
-    herald.start # waiting ... process ends at the same time you get a result
+    herald.start # waiting ... process ends at the same time you receive your notifications
     herald.alive? # => false
 
 ### A bit about callback scope and Herald metaprogramming

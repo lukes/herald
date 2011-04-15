@@ -16,7 +16,7 @@ class Herald
           @priority = options.delete(:priority) || 1
           host = options.delete(:host) || "localhost"
           pass = options.delete(:pass) || nil
-          @growl = ::Growl.new(host, "herald", [@@notification_type], [@@notification_type], pass)
+          @growl = ::Growl.new(host, "Herald", [@@notification_type], [@@notification_type], pass)
         end
         
         # no tests for Growl
