@@ -8,6 +8,7 @@ class Herald
       # lazy-load open-uri when this Module is used
       def self.extended(base)
         Herald.lazy_load('open-uri')
+        Herald.lazy_load('crack')
       end
       
       def parse_options(options)
@@ -22,14 +23,14 @@ class Herald
       def cleanup; end
       
       def to_s
-        "Herald RSS Watcher, URL: #{@uris}, Keywords: '#{@keywords}', Timer: #{@timer}, State: #{@keep_alive ? 'Watching' : 'Stopped'}"
+        "Herald RSS Watcher, URIs: #{@uris}, Keywords: '#{@keywords}', Timer: #{@timer}, State: #{@keep_alive ? 'Watching' : 'Stopped'}"
       end
             
     private
     
       def activities
         @uris.each do |uri|
-          # return response as string and parse to RSS
+          # return response as a Hash
           begin
             rss = Crack::XML.parse(open(uri).read)
           rescue

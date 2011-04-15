@@ -11,6 +11,7 @@ class Herald
       # lazy-load open-uri when this Module is used
       def self.extended(base)
         Herald.lazy_load('open-uri')
+        Herald.lazy_load('crack')
       end
 
       def parse_options(options); end

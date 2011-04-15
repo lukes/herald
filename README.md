@@ -43,6 +43,13 @@ Or an RSS feed
       check :rss, :from => "http://example.com/.rss"
       _for "soundofmusic"
     end
+    
+Or text in a website
+
+    Herald.watch do
+      check :website, :from => "http://example.com"
+      _for "soundofmusic"
+    end
 
 Or an email inbox [Not Implemented]
 

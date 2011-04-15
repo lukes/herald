@@ -1,7 +1,4 @@
 require 'rubygems'
-#require 'json'
-gem 'crack'
-require 'crack'
 
 require 'herald/watcher'
 require 'herald/notifier'
@@ -89,7 +86,7 @@ class Herald
   
   # create a new Watcher
   def check(type, options = {}, &block)
-    options[:keep_alive] = @keep_alive
+    options[:keep_alive] ||= @keep_alive
     @watchers << Herald::Watcher.new(type, options, &block)
   end
 

@@ -2,7 +2,7 @@ class Herald
   
   class Watcher
     
-    @@watcher_types = [:rss, :twitter] # :imap
+    @@watcher_types = [:rss, :twitter, :website] # :imap
     DEFAULT_TIMER = 60
 
     attr_reader :type, :keep_alive, :thread, :items
