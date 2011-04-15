@@ -166,10 +166,6 @@ class Herald
   def alive?
     !!@subprocess
   end
-  
-  def to_s
-    "#{alive? ? 'Alive' : 'Stopped'}Alive"
-  end
     
 private
   
