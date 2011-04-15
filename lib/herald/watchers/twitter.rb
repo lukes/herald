@@ -37,7 +37,7 @@ class Herald
 
       def activities
         # return response as string from Twitter and parse it to JSON
-        json = Crack::JSON.parse(open(@uri.join("&")).read)
+        json = Crack::JSON.parse(open(URI.escape(@uri.join("&"))).read)
         # will be nil if there are no results
         return if json["results"].nil?
         @last_tweet_id = json["max_id"]

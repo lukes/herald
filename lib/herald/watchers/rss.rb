@@ -15,6 +15,7 @@ class Herald
         if @uris.empty?
           raise ArgumentError, "RSS source not specified in :from Hash"
         end
+        @uris.map!{ |uri| URI.escape(uri) }
       end
 
       def prepare; end
