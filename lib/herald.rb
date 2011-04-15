@@ -137,6 +137,7 @@ class Herald
       # wait before the end of this script
       # for all watchers to finish their jobs
       Process.waitpid(@subprocess)
+      @subprocess = nil # signal unalive state
     end
     self # return instance object
   end
