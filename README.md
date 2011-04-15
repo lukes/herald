@@ -21,7 +21,7 @@ Installation
 Usage
 -----
 
-First step is `require` Herald into your Ruby project:
+First step is to `require` Herald into your Ruby project:
 
     require 'rubygems'
     require 'herald'
@@ -90,8 +90,8 @@ To use Growl, enable "Listen for incoming notifications" and "Allow remote appli
 To ping a URI, pass Herald `action :ping, :uri => "http://address.to.ping"`:
 
     Herald.watch_twitter do
-      _for "#yaks", "#in", "#space"
-      action :ping, :uri => "http://counter.com/+1"
+      _for "#fundamentalists", "#in", "#space"
+      action :ping, :uri => "http://armageddon-clock.com/+1"
     end
     
 #### Post
@@ -99,8 +99,8 @@ To ping a URI, pass Herald `action :ping, :uri => "http://address.to.ping"`:
 To post information about what Herald finds to a URI, pass Herald `action :post, :uri => "http://address.to.post.to"`:
 
     Herald.watch_twitter do
-      _for "#yaks", "#in", "#space"
-      action :post, :uri => "http://yakdb.com/post"
+      _for "vanity", "tweeting"
+      action :post, :uri => "http://twitter-loves-me.com/post"
     end
     
 #### Callbacks
@@ -128,7 +128,6 @@ To set a different sleep time:
 
 Assign the herald watcher to a variable
 
-    require 'herald'
     herald = Herald.watch_rss :from => "http://www.reddit.com/r/pics/new/.rss" do
       _for "imgur"
     end
@@ -150,15 +149,14 @@ Start a second herald
 
     herald_the_second = Herald.watch_twitter { _for "#herald" }
 
-Use `Herald` class methods to inspect and edit heralds as a batch
+Use the `Herald` class methods to inspect and edit your heralds as a batch
 
-    Herald.heralds # prints both running heralds
-    Herald.heralds.to_s # print in English
-    Herald.stop # both heralds stopped
+    Herald.heralds # prints all running heralds
+    Herald.stop # all heralds stopped
     Herald.alive? # => false
-    Herald.start # both heralds restarted
+    Herald.start # all heralds restarted
             
-### Look Once
+### Look once
 
 Rather than watching, if you just want to get a single poll of keywords, use `once()`. All the same parameters as with `watch()` can be used (`every` will be ignored).
 
@@ -167,12 +165,12 @@ Rather than watching, if you just want to get a single poll of keywords, use `on
       _for "#herald"
     end
 
-As with watching, Herald will fork a new process (or one for every source you're `check`ing), but unlike with watching, Herald will wait for the process to finish.
+As with watching, Herald will fork a new process (or one for every source you're `check`ing), but unlike with watching, Herald will block and wait for the process to finish.
 
-    herald.start # herald will block and wait for a result
+    herald.start # waiting ... process ends at the same time you get a result
     herald.alive? # => false
 
-### Callback Scope and Herald Metaprogramming
+### A bit about callback scope and Herald metaprogramming
 
 Callbacks allow a great deal of reflection into the internals of Herald.
 
@@ -196,7 +194,7 @@ If passed in within the scope of `Herald::Watcher`, it will have access to the p
       end
     end
 
-### Herald Binary [Not Implemented]
+### Herald binary [Not Implemented]
 
     herald -watch twitter -for #eqnz
     herald -once twitter -for #herald
