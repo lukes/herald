@@ -52,7 +52,7 @@ describe Herald do
     it "must assign keyword when passed as a string" do
       @herald.watchers.first.keywords.must_be_kind_of(Array)
       @herald.watchers.first.keywords.size.must_equal(1)
-      @herald.watchers.first.keywords.to_s.must_equal("test")
+      @herald.watchers.first.keywords.join.must_equal("test")
     end
     it "must slurp keywords when passed as a multiargument strings" do
       keywords = ["test1", "test2"]
