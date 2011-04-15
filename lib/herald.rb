@@ -11,6 +11,7 @@ require 'herald/item'
 class Herald
 
   @@heralds = []
+  
   attr_accessor :watchers, :keep_alive, :subprocess
 
   def self.watch(&block)
@@ -88,7 +89,8 @@ class Herald
   
   # create a new Watcher
   def check(type, options = {}, &block)
-    @watchers << Herald::Watcher.new(type, @keep_alive, options, &block)
+    options[:keep_alive] = @keep_alive
+    @watchers << Herald::Watcher.new(type, options, &block)
   end
 
   # send keywords to Watchers

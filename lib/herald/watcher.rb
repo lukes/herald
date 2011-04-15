@@ -8,7 +8,7 @@ class Herald
     attr_reader :type, :keep_alive, :thread, :items
     attr_accessor :notifiers, :keywords, :timer
     
-    def initialize(type, keep_alive, options, &block)
+    def initialize(type, options, &block)
       @type = type.to_sym
       # TODO this is prepared to handle other protocols, but might not be necessary
 #      if @type == :inbox
@@ -21,10 +21,10 @@ class Herald
       unless @@watcher_types.include?(@type)
         raise ArgumentError, "#{@type} is not a valid Watcher type"
       end
-      @keep_alive = keep_alive
       @keywords = []
       @notifiers = []
       @items = []
+      @keep_alive = options.delete(:keep_alive)
       @timer = Watcher::DEFAULT_TIMER
       Herald.lazy_load_module("watchers/#{@type}")
       # extend class with module
