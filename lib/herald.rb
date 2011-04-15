@@ -145,7 +145,17 @@ class Herald
   # or have watchers do cleanup tasks on exit?
   # look at GOD
   def stop
-    Process.kill("TERM", @subprocess) if @subprocess
+    if @subprocess
+      begin
+        Process.kill("TERM", @subprocess)
+      # if @subprocess PID does not exist, 
+      # this will be due to an unhandled error
+      # in the subprocess
+      rescue Errno::ESRCH => e
+        # do nothing
+        puts "Unhandled error #{e.message}"
+      end
+    end
     @subprocess = nil
     self
   end
