@@ -89,7 +89,7 @@ class Herald
   
   # create a new Watcher
   def check(type, options = {}, &block)
-    options[:keep_alive] = @keep_alive
+    options[:keep_alive] ||= @keep_alive
     @watchers << Herald::Watcher.new(type, options, &block)
   end
 
