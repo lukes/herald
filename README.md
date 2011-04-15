@@ -5,10 +5,9 @@ Herald is a simple notifier for Twitter, RSS, or email.
 
 Pass Herald some keywords and sources to watch, and Herald will notify you using Growl, email, pinging a site, or running Ruby code as soon as those keywords appear.
 
-Compatibility
--------------
+### Compatibility
 
-Mac and linux only (due to difficulty in managing Windows processes).
+Mac and linux only.
 
 Installation
 ------------
