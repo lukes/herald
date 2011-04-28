@@ -4,9 +4,9 @@ class Herald
     module Rss
 
       attr_accessor :uris
-      
+    
       # lazy-load open-uri when this Module is used
-      def self.extended(base)
+      def self.included(base)
         Herald.lazy_load('open-uri')
         Herald.lazy_load('crack')
       end
@@ -39,10 +39,15 @@ class Herald
           # skip if rss variable is nil, or is missing
           # rss elements in the expected nested format
           next unless defined?(rss["rss"]["channel"]["item"])
+          rss = rss["rss"]["channel"]["item"]
+          # if there is only 1 <item> in the rss document, 
+          # rss variable at the moment will be a Hash, so
+          # convert to a single element array
+          rss = [rss] if rss.is_a?(Hash) 
           # ignore items that have been part of a notification round
           # or that don't contain the keywords being looked for
           items = []
-          rss["rss"]["channel"]["item"].each do |item|
+          rss.each do |item|
             # if we've already seen this item, skip to next item
             if @items.include?(item)
               next

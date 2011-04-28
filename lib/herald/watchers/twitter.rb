@@ -5,11 +5,10 @@ class Herald
     module Twitter
 
       TWITTER_API = "http://search.twitter.com/search.json"
-
       attr_accessor :uri, :last_tweet_id
-      
+
       # lazy-load open-uri when this Module is used
-      def self.extended(base)
+      def self.included(base)
         Herald.lazy_load('open-uri')
         Herald.lazy_load('crack')
       end

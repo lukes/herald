@@ -4,9 +4,9 @@ class Herald
     module Imap
 
       attr_accessor :user, :pass, :host, :mailbox, :last_uid
-
+          
       # lazy-load net/imap when this Module is used
-      def self.extended(base)
+      def self.included(base)
         Herald.lazy_load('net/imap')
         Herald.lazy_load('date')
       end

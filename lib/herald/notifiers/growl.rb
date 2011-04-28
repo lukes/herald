@@ -6,10 +6,11 @@ class Herald
 
         @@notification_type = "Herald Notification"
         
-        attr_accessor :growl, :sticky
-
         def self.extended(base)
           Herald.lazy_load('ruby-growl')
+          class >> base
+            attr_accessor :growl, :sticky
+          end
         end
 
         def parse_options(options)

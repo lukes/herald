@@ -2,7 +2,7 @@
 
 describe Herald do
   before do
-    @herald = Herald.watch { check :twitter; _for "test" }
+    @herald = Herald.watch_twitter { _for "test" }
   end
   
   after do
@@ -70,7 +70,7 @@ describe Herald do
 
   describe "initialisation with actions" do
     it "should assign stdout as the default Notifier" do
-      skip("@notifiers appears as empty, possible due to threading?")
+      skip("@notifiers appears as empty because anything assigned in the process fork can't be accessed outside it")
       @herald.watchers.first.notifiers.size.must_equal(1)
     end
   end

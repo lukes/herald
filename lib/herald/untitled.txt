@@ -1,0 +1,5 @@
+require 'herald'
+herald = Herald.watch do
+  check :website, :from => "http://www.google.co.nz", :within_tags => ["#some_id", #another_id]
+  _for "search"
+end

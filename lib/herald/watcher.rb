@@ -5,8 +5,12 @@ class Herald
     @@watcher_types = [:rss, :twitter, :website] # :imap
     DEFAULT_TIMER = 60
 
-    attr_reader :type, :keep_alive, :thread, :items
-    attr_accessor :notifiers, :keywords, :timer
+    attr_reader :type, :keep_alive, :thread
+    attr_accessor :notifiers, :keywords, :timer, :items
+    
+    def items_is
+      @items
+    end
     
     def initialize(type, options, &block)
       @type = type.to_sym
@@ -27,8 +31,11 @@ class Herald
       @keep_alive = options.delete(:keep_alive)
       @timer = Watcher::DEFAULT_TIMER
       Herald.lazy_load_module("watchers/#{@type}")
-      # extend class with module
-      send(:extend, eval(@type.to_s.capitalize))
+      # include module
+      @@type = @type
+      class << self
+        send(:include, eval(@@type.to_s.capitalize))
+      end
       # each individual Watcher will handle their options
       parse_options(options)
       # eval the block, if given

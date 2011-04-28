@@ -4,11 +4,12 @@ class Herald
 
       module Ping
 
-        attr_reader :uri
-
         # lazy-load net/http when this Module is used
         def self.extended(base)
           Herald.lazy_load('net/http')
+          class << base
+            attr_accessor :uri
+          end
         end
 
         # note: dupe between ping and post

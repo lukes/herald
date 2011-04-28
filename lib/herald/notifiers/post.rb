@@ -5,11 +5,12 @@ class Herald
       # note most of this code is duplicated between ping and post
       module Post
 
-        attr_reader :uri
-
         # lazy-load net/http when this Module is used
         def self.extended(base)
           Herald.lazy_load('net/http')
+          class << base
+            attr_accessor :uri
+          end
         end
 
         def parse_options(options)
