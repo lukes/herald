@@ -10,3 +10,5 @@
   - Show dependency on ruby-growl if installed for mac
   
 - Growl icon
+
+- Custom Error classes
