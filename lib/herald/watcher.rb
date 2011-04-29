@@ -7,11 +7,7 @@ class Herald
 
     attr_reader :type, :keep_alive, :thread
     attr_accessor :notifiers, :keywords, :timer, :items
-    
-    def items_is
-      @items
-    end
-    
+
     def initialize(type, options, &block)
       @type = type.to_sym
       # TODO this is prepared to handle other protocols, but might not be necessary
@@ -47,11 +43,13 @@ class Herald
     
     def _for(*keywords)
       @keywords += keywords.flatten
+      self
     end
     
     # assign the Notifier
     def action(type = :callback, options = {}, &block)
       @notifiers << Herald::Watcher::Notifier.new(type, options, &block)
+      self
     end
     
     # parse a hash like { 120 => "seconds" }
@@ -70,6 +68,7 @@ class Herald
         raise ArgumentError, "Invalid time unit for every. (Use seconds, minutes, hours or days)"
       end
       @timer = quantity * unit
+      self
     end
     
     # call the Notifier and pass it a message
@@ -77,6 +76,7 @@ class Herald
       @notifiers.each do |notifier|
         notifier.notify(item)
       end
+      self
     end
     
     def start
@@ -92,6 +92,7 @@ class Herald
           sleep @timer if @keep_alive
         end while @keep_alive
       }
+      self
     end
         
     def stop
@@ -99,6 +100,7 @@ class Herald
       @keep_alive = false
       # cleanup() is defined in the individual Watcher modules
       cleanup()
+      self
     end
     
   end
