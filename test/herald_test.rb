@@ -25,12 +25,6 @@ describe Herald do
   end
 
   describe "initialisation of twitter watcher" do
-    it "must throw an error if no keywords are given" do
-      skip("Test not working")
-      assert_raises(ArgumentError) do
-        Herald.watch { check :twitter }
-      end
-    end
     it "must assign a twitter watcher" do
       @herald.watchers.first.type.must_equal(:twitter)
     end
