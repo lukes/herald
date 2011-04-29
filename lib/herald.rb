@@ -88,6 +88,7 @@ class Herald
   def check(type, options = {}, &block)
     options[:keep_alive] ||= @keep_alive
     @watchers << Herald::Watcher.new(type, options, &block)
+    self
   end
 
   # send keywords to Watchers
@@ -95,6 +96,7 @@ class Herald
     @watchers.each do |watcher|
       watcher._for(*keywords)
     end
+    self
   end
 
   # send instructions to Watchers
@@ -102,6 +104,7 @@ class Herald
     @watchers.each do |watcher|
       watcher.action(type, options, &block)
     end
+    self
   end
     
   # send sleep time to Watchers
@@ -109,6 +112,7 @@ class Herald
     @watchers.each do |watcher|
       watcher.every(time)
     end
+    self
   end
   
   # start Watchers
@@ -133,9 +137,17 @@ class Herald
     if @keep_alive
       Process.detach(@subprocess)
     else
-      # wait before the end of this script
-      # for all watchers to finish their jobs
-      Process.waitpid(@subprocess)
+      begin
+        # wait before the end of this script
+        # for all watchers to finish their jobs
+        Process.waitpid(@subprocess)
+      # if @subprocess PID does not exist, it will
+      # be due to an error in the subprocess
+      # which has terminated it and waitpid()
+      # will throw an exception
+      rescue Errno::ECHILD => e
+        # do nothing
+      end
       @subprocess = nil # signal unalive state
     end
     self # return instance object
@@ -149,11 +161,10 @@ class Herald
       begin
         Process.kill("TERM", @subprocess)
       # if @subprocess PID does not exist, 
-      # this will be due to an unhandled error
-      # in the subprocess
+      # this will be due to an error in the subprocess
+      # which has terminated it
       rescue Errno::ESRCH => e
         # do nothing
-        puts "Unhandled error #{e.message}"
       end
     end
     @subprocess = nil
