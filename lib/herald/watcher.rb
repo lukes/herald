@@ -2,7 +2,7 @@ class Herald
   
   class Watcher
     
-    @@watcher_types = [:rss, :twitter, :website] # :imap
+    @@watcher_types = [:rss, :twitter, :website]
     DEFAULT_TIMER = 60
 
     attr_reader :type, :keep_alive, :thread
@@ -10,13 +10,6 @@ class Herald
 
     def initialize(type, options, &block)
       @type = type.to_sym
-      # TODO this is prepared to handle other protocols, but might not be necessary
-#      if @type == :inbox
-#        if options.key?(:imap)
-#          @type = :imap
-#          options[:host] = options[:imap]
-#        end
-#      end
       # check watcher type
       unless @@watcher_types.include?(@type)
         raise ArgumentError, "#{@type} is not a valid Watcher type"

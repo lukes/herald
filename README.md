@@ -1,9 +1,9 @@
 Herald
 ====
 
-Herald is a simple notifier for Twitter, RSS, or email. 
+Herald is a simple notifier for Twitter or RSS.
 
-Pass Herald some keywords and sources to watch, and Herald will notify you using Growl, email, pinging a site, or running Ruby code as soon as those keywords appear.
+Pass Herald some keywords and sources to watch, and Herald will notify you using Growl, pinging or posting to a site, or running Ruby code as soon as those keywords appear.
 
 Installation
 ------------
@@ -44,13 +44,6 @@ Or text in a website
 
     Herald.watch do
       check :website, :from => "http://example.com"
-      _for "soundofmusic"
-    end
-
-Or an email inbox [Not Implemented]
-
-    Herald.watch do
-      check :inbox, :imap => "imap.server.com", :user => "username", :pass => "supersecret"
       _for "soundofmusic"
     end
 
