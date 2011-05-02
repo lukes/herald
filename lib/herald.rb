@@ -29,6 +29,9 @@ class Herald
   def self.watch_rss(options = {}, &block)
     watch() { check(:rss, options, &block) }
   end
+  def self.watch_website(options = {}, &block)
+    watch() { check(:website, options, &block) }
+  end
 
   # batch methods
   def self.start
