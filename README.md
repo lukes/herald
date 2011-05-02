@@ -120,8 +120,6 @@ Pass the callback a parameter to be given a `Herald::Item` object within your bl
     Herald.watch_twitter do
       _for "revolution"
       action do |item|
-        puts item.title # simple String
-        puts item.message # simple String
         puts item.data # full Hash of all data
       end
     end
