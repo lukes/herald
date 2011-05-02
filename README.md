@@ -115,16 +115,14 @@ If you'd like to do your own thing entirely each time a keyword appears, pass a 
     end
     
 
-Pass the callback a parameter to be given a `Herald::Item` object within your block. The `Herald::Item` makes available everything Herald could find in the source.
-
-The properties of `Herald::Item` are simple `title` and `message` Strings, and `data`, which is a Hash of all data obtainable)
+Pass the callback a parameter to be given a `Herald::Item` object within your block. The object makes available everything Herald could find in the source.
 
     Herald.watch_twitter do
       _for "revolution"
       action do |item|
-        puts item.title
-        puts item.message
-        puts item.data
+        puts item.title # simple String
+        puts item.message # simple String
+        puts item.data # full Hash of all data
       end
     end
 
