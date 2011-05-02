@@ -27,7 +27,7 @@ class Herald
           end
         end
         # default selector if no relevant option passed
-        @selectors ||= [""]
+        @selectors ||= ["body"]
         # if we should traverse, append a * (css for "every child") to all selectors
         if @traverse
           @selectors.map!{|s|"#{s} *"}
@@ -51,42 +51,37 @@ class Herald
 
       def activities
         @uris.each do |uri|
-puts "Looking up #{uri}"
-          hpricot = Hpricot(open(uri).read)
-          hpricot_object.search("script").remove
+#          hpricot = Hpricot(open(uri).read, :fixup_tags => true)
+          hpricot = Hpricot(open(uri).read, :xhtml_strict => true)
+          hpricot.search("script").remove
           if title = hpricot.search("title").inner_html
             title.strip!
           end
           title ||= "Website"
           # for every selector given
           @selectors.each do |selector|
-puts "Selector #{selector}"
             # and for every keyword given
             @keywords.each do |keyword|
-puts "Keyword #{keyword}"
               # return response as string and parse to RSS
               begin
                 # search for elements in the page that match the
                 # selector, and contain the keyword as text
                 # TODO - keywords should be parsed and validated
-                hpricot.search("#{selector} [text()*=#{keyword}]").each do |element|
-puts "Found something!"
-puts element.to_html
-                  # parse the entire element found to a Hash
-                  data = Crack::XML.parse(element.to_html)
-puts "Looks like #{data}"
-                  # ignore items that have been part of a notification round
-                  next if @items.include?(data)
-                  # prepare text
-                  if text = element.inner_html
-                    text.strip!
-                  end
-                  text ||= nil
-puts "Text is #{text}"
-                  # notify!
-                  notify(Item.new(title, text, data))
-                  @items << data
+                # TODO - keywords at the moment are case-sensitive
+                # get the second to last element
+                elements = hpricot.search("#{selector} [text()*=#{keyword}]")
+                element = elements[elements.size - 2]
+                if text = element.inner_html
+                  text.strip!
                 end
+                html = element.to_html
+                tag = element.name
+                data = {:title => title, :text => text, :tag => tag, :html => html}
+                # ignore items that have been part of a notification round
+                next if @items.include?(data)
+                # notify!
+                notify(Item.new(title, text, data))
+                @items << data
               rescue
                 # TODO handle errors
               end # end begin
