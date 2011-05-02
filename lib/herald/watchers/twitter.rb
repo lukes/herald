@@ -44,7 +44,7 @@ class Herald
         @last_tweet_id = json["max_id"]
         json["results"].each do |tweet|
           @items << tweet
-          notify(Item.new("@#{tweet['from_user']}", tweet['text'], json['results']))
+          notify(Item.new("@#{tweet['from_user']}", tweet['text'], tweet))
         end
         @uri = [@uri.first, "since_id=#{@last_tweet_id}"]
       end
