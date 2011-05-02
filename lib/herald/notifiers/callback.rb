@@ -14,7 +14,11 @@ class Herald
         def test; true; end
 
         def notify(item)
-          @proc.call
+          if @proc.arity == 1
+            @proc.call(item)
+          else
+            @proc.call
+          end
         end
 
       end

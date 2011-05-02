@@ -1,7 +1,7 @@
 Herald
 ====
 
-Herald is a simple notifier for Twitter or RSS.
+Herald is a simple notifier for Twitter and RSS.
 
 Pass Herald some keywords and sources to watch, and Herald will notify you using Growl, pinging or posting to a site, or running Ruby code as soon as those keywords appear.
 
@@ -111,6 +111,16 @@ If you'd like to do your own thing entirely each time a keyword appears, pass a 
       _for "revolution"
       action do
         `say "Viva!"`
+      end
+    end
+    
+
+Pass the callback a parameter, for it to become a `Herald::Item` object within the block, full of information that you can interact with. The properties of `Herald::Item` are simple `title` and `message` Strings, and `data`, which is a full Hash of everything Herald could find in the source)
+
+    Herald.watch_twitter do
+      _for "revolution"
+      action do |item|
+        puts item.data
       end
     end
 
