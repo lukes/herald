@@ -5,5 +5,5 @@ task :test do
   $LOAD_PATH.unshift './lib'
   require 'herald'
   require 'minitest/autorun'
-  Dir.glob("test/**/*_test.rb").each { |test| require "./#{test}" }
+  Dir.glob("test/*_test.rb").each { |test| require "./#{test}" }
 end
