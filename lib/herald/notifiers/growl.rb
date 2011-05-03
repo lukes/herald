@@ -8,7 +8,7 @@ class Herald
         
         def self.extended(base)
           Herald.lazy_load('ruby-growl')
-          class >> base
+          class << base
             attr_accessor :growl, :sticky
           end
         end
