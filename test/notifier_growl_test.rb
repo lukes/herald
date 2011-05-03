@@ -12,7 +12,7 @@ if RUBY_PLATFORM.downcase.include?("darwin")
   
     describe "basic initialisation" do
       it "must lazy load ruby-growl" do
-        notifier = Herald.watch_twitter { _for "#herald"; action :growl }
+        Herald.watch_twitter { _for "#herald"; action :growl }
         defined?(Growl).must_equal("constant")
       end
     end
