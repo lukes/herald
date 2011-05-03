@@ -20,7 +20,7 @@ class Herald
           pass = options.delete(:pass) || nil
           @growl = ::Growl.new(host, "Herald", [@@notification_type], [@@notification_type], pass)
         end
-        
+
         # no tests for Growl
         def test; end
 
