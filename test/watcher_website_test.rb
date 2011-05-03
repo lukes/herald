@@ -19,7 +19,7 @@ describe Herald::Watcher::Website do
       defined?(Hpricot).must_equal("constant")
     end
     it "must accept array of uris" do
-      herald = Herald.watch_website(:from => ["test/mocks/website.html", "test/mocks/website2.html"]) { _for "example" }
+      herald = Herald.watch_website(:from => ["test/mocks/web.html", "test/mocks/web.html"]) { _for "example" }
       herald.watchers.first.uris.must_be_kind_of(Array)
     end
     it "must map escape URI strings" do
