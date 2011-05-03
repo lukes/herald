@@ -14,36 +14,42 @@ class Herald
         end
 
         def parse_options(options)
-          uri = options.delete(:uri) || options.delete(:url)
-          unless uri
+          @uris = []
+          uris = Array(options.delete(:uri) || options.delete(:url) || options.delete(:uris) || options.delete(:urls))
+          if uris.empty?
             raise ArgumentError, ":uri for :ping action not specified"
           end
-          begin
-            uri = URI.parse(URI.encode(uri))
-            # if URI lib can't resolve a protocol (because it was missing from string)
-            if uri.class == URI::Generic
-              uri = URI.parse("http://#{uri.path}")
+          uris.each do |uri|
+            begin
+              uri = URI.parse(uri)
+              # if URI lib can't resolve a protocol (because it was missing from string)
+              if uri.class == URI::Generic
+                uri = URI.parse("http://#{uri.path}")
+              end
+              # add trailing slash if nil path. path() will return nil
+              # if uri passed was a domain missing a trailing slash. net/http's post
+              # methods require the trailing slash to be present otherwise they fail
+              uri.path = "/" if uri.path.empty?
+              @uris << uri
+            rescue URI::InvalidURIError
+              raise ArgumentError, ":uri for :ping action invalid"
             end
-            # add trailing slash if nil path. path() will return nil
-            # if uri passed was a domain missing a trailing slash. net/http's post
-            # methods require the trailing slash to be present otherwise they fail
-            uri.path = "/" if uri.path.empty?
-            @uri = uri
-          rescue URI::InvalidURIError
-            raise ArgumentError, ":uri for :ping action invalid"
           end
         end
-
-        # test by pinging to URI throw exception if fail
+        
         def test
-          response = Net::HTTP.new(@uri.host).head('/')
-          return if response.kind_of?(Net::HTTPOK)
-          # TODO raise custom error types
-          raise "#{response.code} status code returned for URI #{@uri}. 200 code expected"
+          @uris.each do |uri|
+            response = Net::HTTP.new(uri.host).head('/')
+            return if response.kind_of?(Net::HTTPOK)
+            # TODO raise custom error types
+            raise "#{response.code} status code returned for URI #{uri}. 200 code expected"
+          end
         end
 
         def notify(item)
-          Net::HTTP.post_form(@uri, { "title" => item.title, "message" => item.message }.merge(item.data))
+          @uris.each do |uri|
+            Net::HTTP.post_form(uri, { "title" => item.title, "message" => item.message }.merge(item.data))
+          end
         end
 
       end
