@@ -16,7 +16,7 @@ Installation
 
     git clone git://github.com/lukes/herald.git
     gem build herald.gemspec
-    gem install herald-0.1.gem
+    gem install herald-0.2.gem
 
 Usage
 -----
