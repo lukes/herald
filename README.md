@@ -178,6 +178,8 @@ Use the `Herald` class methods to inspect and edit your heralds as a batch
     Herald.delete(herald) # remove this herald from the Herald.heralds list
     Herald.delete(:stopped) # remove stopped heralds from Herald.heralds list
     Herald.size # prints number of heralds
+    Herald.size(:alive) # prints number of running heralds
+    Herald.size(:stopped) # prints number of stopped heralds
                 
 ### Look once
 
