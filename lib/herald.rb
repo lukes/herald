@@ -35,19 +35,17 @@ class Herald
 
   # batch methods
   def self.start
-    return false if @@heralds.empty?
     @@heralds.each do |herald|
       herald.start
     end
-    true
+    self
   end
 
   def self.stop
-    return false unless Herald.alive?
     @@heralds.each do |herald|
       herald.stop
     end
-    true
+    self
   end
   
   # stop all heralds, and remove them
@@ -59,18 +57,40 @@ class Herald
     true
   end
   
-  # just walk away, leaving whatever strays to themselves
-  def self.demonize!
-    @@heralds.clear
-    true
-  end
-    
   def self.alive?
     @@heralds.any? { |h| h.alive? }
   end
   
-  def self.heralds
+  # returns @@heralds
+  # can optionally take :alive or :stopped
+  def self.heralds(obj = nil)
+    if !obj.nil? && obj.respond_to?(:to_sym)
+      case obj.to_sym
+      when :stopped then return @@heralds.select { |h| !h.alive? }
+      when :alive then return @@heralds.select { |h| h.alive? }
+      end
+      # if obj is not :stopped or :alive
+      raise ArgumentError.new("Unknown parameter #{obj}")
+    end
     @@heralds
+  end
+  
+  # returns size of @@heralds
+  # can optionally take :alive or :stopped
+  def self.size(obj = nil)
+    heralds(obj).size
+  end
+  
+  # takes either a herald object
+  # or :stopped
+  def self.delete(obj)
+    if obj.is_a?(Herald)
+      @@heralds.delete(obj)
+    end
+    if obj.respond_to?(:to_sym) && obj.to_sym == :stopped
+      @@heralds.delete_if { |h| !h.alive? }
+    end
+    self
   end
   
   #
@@ -174,7 +194,12 @@ class Herald
     self
   end
   alias :end :stop
-  alias :kill :stop
+  
+  def delete
+    stop if alive?
+    @@heralds.delete(self)
+    true
+  end
   
   def alive?
     !!@subprocess

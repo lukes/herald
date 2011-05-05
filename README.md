@@ -1,7 +1,7 @@
 Herald
 ====
 
-Herald is a simple notifier for Twitter and RSS.
+Herald is a simple and flexible notifier for Twitter and RSS.
 
 Pass Herald some keywords and sources to watch, and Herald will notify you using Growl, pinging or posting to a site, or running Ruby code as soon as those keywords appear.
 
@@ -60,7 +60,7 @@ Watching two RSS feeds and Twitter for two keywords
 Or, if sources should have different keywords
 
     Herald.watch do    
-      check :rss, :from => "http://earthquake.usgs.gov/earthquakes/catalogs/eqs1day-M0.xml"
+      check :rss, :from => "http://earthquake.usgs.gov/earthquakes/catalogs/eqs1day-M0.xml" do
         _for "christchurch"
       end
       check :twitter do
@@ -102,7 +102,7 @@ To post information about what Herald finds to a URI, pass Herald `action :post,
       _for "vanity", "tweeting"
       action :post, :uri => "http://twitter-loves-me.com/post"
     end
-    
+
 #### Callbacks
 
 If you'd like to do your own thing entirely each time a keyword appears, pass a callback in the form of a Ruby block
@@ -113,7 +113,6 @@ If you'd like to do your own thing entirely each time a keyword appears, pass a 
         `say "Viva!"`
       end
     end
-    
 
 Pass the callback a parameter to be given a `Herald::Item` object within your block. The object makes available everything Herald could find in the source.
 
@@ -124,6 +123,15 @@ Pass the callback a parameter to be given a `Herald::Item` object within your bl
       end
     end
 
+#### Stdout
+
+To print information about what Herald finds, pass Herald `action :stdout`. To save results to a file, include the parameter `:file => "log.txt"`
+
+    Herald.watch_twitter do
+      _for "newsworthy", "topic"
+      action :stdout, :file => "log.txt"
+    end
+        
 ### Timer
 
 By default Herald will sleep for 1 minute after checking each of the sources independently. 
@@ -161,11 +169,16 @@ Start a second herald
 
 Use the `Herald` class methods to inspect and edit your heralds as a batch
 
-    Herald.heralds # prints all running heralds
-    Herald.stop # all heralds stopped
-    Herald.alive? # => false
+    Herald.heralds # prints all heralds (running and stopped)
+    Herald.heralds(:alive) # prints all running heralds
+    Herald.heralds(:stopped) # prints all stopped heralds
+    Herald.stop # stop all heralds
+    Herald.alive? # => true if any heralds are running
     Herald.start # all heralds restarted
-            
+    Herald.delete(herald) # remove this herald from the Herald.heralds list
+    Herald.delete(:stopped) # remove stopped heralds from Herald.heralds list
+    Herald.size # prints number of heralds
+                
 ### Look once
 
 Rather than watching, if you just want to get a single poll of keywords, use `once()`. All the same parameters as with `watch()` can be used (`every` will be ignored)

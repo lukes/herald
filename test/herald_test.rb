@@ -61,6 +61,13 @@ describe Herald do
       herald.watchers.first.keywords.to_s.must_equal(keywords.to_s)
     end
   end
+  
+  describe "delete herald" do
+    it "should allow itself to be deleted" do
+      @herald.delete
+      Herald.size.must_equal(0)
+    end
+  end
 
   describe "initialisation with actions" do
     it "should assign stdout as the default Notifier" do
@@ -70,27 +77,43 @@ describe Herald do
   end
   
   describe "Herald class methods (stop, start, alive?) must allow batch operations" do
-    it "must return array of running heralds" do
+    it "must return array of heralds" do
       Herald.heralds.must_be_kind_of(Array)
       Herald.heralds.size.must_equal(1)
       Herald.heralds.first.must_be_kind_of(Herald)
       herald_2 = Herald.watch { check :twitter; _for "test" }
+      herald_2.stop
       Herald.heralds.size.must_equal(2)
+      Herald.heralds(:stopped).size.must_equal(1)
+      Herald.heralds(:alive).size.must_equal(1)
+    end
+    it "must allow heralds to be deleted by passing delete and herald object" do
+      Herald.heralds.size.must_equal(1)
+      Herald.delete(@herald)
+      Herald.size.must_equal(0)
+    end
+    it "must allow all stopped heralds to be deleted" do
+      Herald.size.must_equal(1)
+      Herald.delete(:stopped).size.must_equal(1)
+      @herald.stop
+      Herald.delete(:stopped).size.must_equal(0)
+    end
+    it "size() must return size of @@heralds" do
+      Herald.heralds.size.must_equal(1)
+      herald_2 = Herald.watch { check :twitter; _for "test" }
+      herald_2.stop
+      Herald.size.must_equal(2)
+      Herald.size(:stopped).must_equal(1)
+      Herald.size(:alive).must_equal(1)
     end
     it "must report on if there are any heralds alive" do
       Herald.alive?.must_equal(true)
     end
     it "must allow heralds to be stopped" do
-      Herald.stop.must_equal(true)
-    end
-    it "alive? must report false if heralds exist, but none are running" do
-      Herald.stop
-      Herald.heralds.size.must_equal(1)
-      Herald.alive?.must_equal(false)
-    end
-    it "must report false if heralds are told to stop, and no herald are alive" do
-      Herald.stop
-      Herald.stop.must_equal(false)
+      Herald.size(:alive).must_equal(1)
+      Herald.stop.must_equal(Herald)
+      Herald.size(:alive).must_equal(0)
+      Herald.size(:stopped).must_equal(1)
     end
     it "must allow heralds to be restarted" do
       Herald.stop
