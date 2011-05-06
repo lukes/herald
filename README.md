@@ -236,6 +236,6 @@ Use the Herald binary below when you wish to stop your free-spirited heralds aft
     herald -watch twitter -for #eqnz
     herald -once twitter -for #herald
     herald -show-heralds
-    herald -modify 1 -watch rss -from http://example.com/.rss
-    herald -pause 1
-    herald -kill 1
+    sudo herald -modify 1 -watch rss -from http://example.com/.rss
+    sudo herald -pause 1
+    sudo herald -kill 1
