@@ -4,12 +4,17 @@ require 'herald/watcher'
 require 'herald/notifier'
 require 'herald/notifiers/stdout'
 require 'herald/item'
+require 'herald/batch'
+require 'herald/daemon'
 
 class Herald
 
   @@heralds = []
+  @@daemon = false
   
   attr_accessor :watchers, :keep_alive, :subprocess
+  extend Herald::Batch
+  extend Herald::Daemon
 
   def self.watch(&block)
     new(&block).start
@@ -32,34 +37,6 @@ class Herald
   def self.watch_website(options = {}, &block)
     watch() { check(:website, options, &block) }
   end
-
-  # batch methods
-  def self.start
-    @@heralds.each do |herald|
-      herald.start
-    end
-    self
-  end
-
-  def self.stop
-    @@heralds.each do |herald|
-      herald.stop
-    end
-    self
-  end
-  
-  # stop all heralds, and remove them
-  # from list of herald instances. mostly
-  # useful for clearing @@heralds when testing
-  def self.clear
-    stop()
-    @@heralds.clear
-    true
-  end
-  
-  def self.alive?
-    @@heralds.any? { |h| h.alive? }
-  end
   
   # returns @@heralds
   # can optionally take :alive or :stopped
@@ -74,23 +51,16 @@ class Herald
     end
     @@heralds
   end
-  
-  # returns size of @@heralds
-  # can optionally take :alive or :stopped
-  def self.size(obj = nil)
-    heralds(obj).size
+
+  def self.daemonize!
+    @@daemon = true
+    serialize_daemons()
+    $stdout.puts "(Herald is now running in the background)\n"
+    $stdout.flush
   end
   
-  # takes either a herald object
-  # or :stopped
-  def self.delete(obj)
-    if obj.is_a?(Herald)
-      @@heralds.delete(obj)
-    end
-    if obj.respond_to?(:to_sym) && obj.to_sym == :stopped
-      @@heralds.delete_if { |h| !h.alive? }
-    end
-    self
+  def self.is_daemon?
+    @@daemon
   end
   
   #
@@ -155,6 +125,8 @@ class Herald
       Thread.list.each do |thread| 
         thread.join unless thread == Thread.main
       end
+      # give this process a name
+      $0 = "ruby herald"
     }
     # if herald process is persistant
     if @keep_alive
@@ -181,14 +153,7 @@ class Herald
   # look at GOD
   def stop
     if @subprocess
-      begin
-        Process.kill("TERM", @subprocess)
-      # if @subprocess PID does not exist, 
-      # this will be due to an error in the subprocess
-      # which has terminated it
-      rescue Errno::ESRCH => e
-        # do nothing
-      end
+      Herald::Daemon.kill(@subprocess)
     end
     @subprocess = nil
     self
@@ -219,5 +184,5 @@ end
 
 # queue a block to always stop all forked processes on exit
 at_exit do
-  Herald.stop 
+  Herald.stop unless Herald.is_daemon?
 end
