@@ -1,0 +1,13 @@
+=== HEAD (unreleased as a gem)
+
+* Major Enhancements
+  * Added Herald::Daemon, Herald#daemonize! and Herald#kill
+
+* Minor Enhancements
+  * Added Herald#delete, Herald#size, updated Herald#heralds
+
+=== 0.2 / 2011-05-02
+
+* Major Enhancements
+  * Added Ping, Post Notifiers
+  * Added Webite Watcher
