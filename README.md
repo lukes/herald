@@ -218,6 +218,18 @@ If passed in within the scope of `Herald::Watcher` (`action` agents), it will ha
         end
       end
     end
+    
+### Running Herald as a script
+
+Herald cleans up after itself by killing any running herald processes on exit. 
+
+To make Herald run forever, add this to the end of your script
+
+    Herald.demonize!
+
+`demonize!` cuts the apron strings, and once set, your herald process will run forever. 
+
+Use the Herald binary below to control any free heralds down to size.
 
 ### Herald binary [Not Implemented]
 
