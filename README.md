@@ -225,9 +225,9 @@ Herald cleans up after itself by killing any running herald processes on exit.
 
 To make Herald run forever, add this to the end of your script
 
-    Herald.demonize!
+    Herald.daemonize!
 
-`demonize!` cuts the apron strings, and once set, your herald process will run forever. 
+`daemonize!` cuts the apron strings, and once set, your herald process will run forever. 
 
 Use the Herald binary below to control any free heralds down to size.
 
