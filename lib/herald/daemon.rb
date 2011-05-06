@@ -39,17 +39,21 @@ class Herald
       when obj == :all
         serialized_daemons
       when obj.is_a?(String) || obj.is_a?(Fixnum)
-        pids = Array(obj)
+        Array(obj)
       when obj.is_a?(Array)
-        pids = obj
+        obj
       when obj.is_a?(Herald)
-        pids = Array(obj.subprocess)
+        Array(obj.subprocess)
       else
+        nil
+      end
+      if pids.nil?
         raise ArgumentError.new("Unknown parameter #{obj}")
       end
+      pids.map! { |p| p.to_i }
       pids.each do |pid|
         begin
-          Process.kill("TERM", pid.to_i)
+          Process.kill("TERM", pid)
         # if @subprocess PID does not exist, 
         # this will be due to an error in the subprocess
         # which has terminated it
@@ -57,7 +61,7 @@ class Herald
           # do nothing
         end
       end
-      File.truncate(Herald::Daemon.pid_file, 0)
+      delete_daemons(pids)
       self
     end
 
@@ -74,7 +78,11 @@ class Herald
       end
     end
 
-    def serialize_daemons
+    # will serialize all daemons (running in this Ruby session
+    # plus any existing ones in the file). 
+    # optionally can be passed a list of pids, in which case
+    # only these will be serialize
+    def serialize_daemons(daemons = nil)
       # write file, truncating existing file to zero length
       string = running_daemons.join("\n")
       File.open(Herald::Daemon.pid_file, 'w') do |f|
@@ -88,6 +96,15 @@ class Herald
       File.open(Herald::Daemon.pid_file, 'r') do |f|
         # read file, and map to an array of integers
         f.read.split("\n").map { |d| d.to_i }
+      end
+    end
+    
+    # deletes given pids from file
+    def delete_daemons(pids)
+      lines = File.readlines(Herald::Daemon.pid_file)
+      lines.delete_if { |line| pids.include?(line.to_i) }
+      File.open(Herald::Daemon.pid_file, 'w') do |f|
+        f.write(lines)
       end
     end
     
