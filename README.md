@@ -229,7 +229,7 @@ To make Herald run forever, add this to the end of your script
 
 `daemonize!` cuts the apron strings, and once set, your heralds will run forever. 
 
-Use the Herald binary below when you wish to stop your free-spirited heralds after calling it.
+Use the Herald binary below when you wish to stop your free-spirited heralds.
 
 ### Herald binary [Not Implemented]
 
