@@ -7,7 +7,7 @@ class Herald
         def parse_options(options)
           # option to send stdout to file
           if file = options.delete(:file)
-            $stdout = File.new(file, 'w')
+            $stdout = File.new(file, 'a')
           end
         end
         
