@@ -231,11 +231,12 @@ To make Herald run forever, add this to the end of your script
 
 Use the Herald binary below when you wish to stop your free-spirited heralds.
 
-### Herald binary [Not Implemented]
+### Herald binary
 
-    herald -watch twitter -for #eqnz
-    herald -once twitter -for #herald
-    herald -show-heralds
-    sudo herald -modify 1 -watch rss -from http://example.com/.rss
-    sudo herald -pause 1
-    sudo herald -kill 1
+Print IDs of any running heralds
+
+    sudo herald --show-heralds
+    
+Pass the ID to the `kill` command
+    
+    sudo herald --kill 1
