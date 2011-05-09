@@ -172,11 +172,14 @@ Use the `Herald` class methods to inspect and edit your heralds as a batch
     Herald.heralds # prints all heralds (running and stopped)
     Herald.heralds(:alive) # prints all running heralds
     Herald.heralds(:stopped) # prints all stopped heralds
+    
     Herald.stop # stop all heralds
     Herald.alive? # => true if any heralds are running
     Herald.start # all heralds restarted
+    
     Herald.delete(herald) # remove this herald from the Herald.heralds list
     Herald.delete(:stopped) # remove stopped heralds from Herald.heralds list
+    
     Herald.size # prints number of heralds
     Herald.size(:alive) # prints number of running heralds
     Herald.size(:stopped) # prints number of stopped heralds
@@ -195,7 +198,7 @@ As with watching, Herald will fork a new process (or one for every source you're
     herald.start # waiting ... process ends at the same time you receive your notifications
     herald.alive? # => false
 
-### A bit about callback scope and Herald metaprogramming
+### Callback scope and Herald metaprogramming
 
 Callbacks allow a great deal of reflection into the internals of Herald.
 
