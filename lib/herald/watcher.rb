@@ -48,6 +48,9 @@ class Herald
     # parse a hash like { 120 => "seconds" }
     def every(time); 
       quantity = time.keys.first.to_i
+      if quantity < 1
+        raise ArgumentError.new("Quantity must be greater than 0")
+      end
       unit = case time.values.first
       when /^second/
         1
