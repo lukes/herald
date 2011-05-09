@@ -223,13 +223,13 @@ If passed in within the scope of `Herald::Watcher` (`action` agents), it will ha
 
 Herald cleans up after itself by killing any running herald processes on exit. 
 
-To make Herald run forever, add this to the end of your script
+To instead have Herald run forever, add this to the end of your script
 
     Herald.daemonize!
 
 `daemonize!` cuts the apron strings, and once set, your heralds will run forever. 
 
-Use the Herald binary below when you wish to stop your free-spirited heralds.
+Use the Herald executable below when you wish to stop your free-spirited heralds.
 
 ### Herald executable
 
@@ -237,6 +237,6 @@ Print IDs of any running heralds
 
     sudo herald --show-heralds
     
-Pass the ID to the `kill` command
+Pass the ID to the `kill` command to stop it running
     
     sudo herald --kill 1
