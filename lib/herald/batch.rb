@@ -23,7 +23,7 @@ class Herald
     def clear
       stop()
       heralds.clear
-      true
+      self
     end
 
     def alive?
