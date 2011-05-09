@@ -1,0 +1,31 @@
+#!/usr/bin/env ruby
+
+lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
+$LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
+
+require 'herald'
+require 'herald/version'
+require 'herald/command'
+require 'slop'
+
+class Herald
+  extend Herald::Daemon
+end
+  
+opts = Slop.parse do
+  on :V, :version, 'Print the version' do
+    puts "Version #{Herald::VERSION}"
+  end
+  on :s, :"show-heralds", 'Show all running heralds'
+  on :k, :kill, 'Kill the herald', :as => :integer, :optional => true
+  on :h, :help, "Show this message"
+end
+
+opts.banner = "Usage: herald [options]"
+
+if opts[:help] || ARGV.empty?
+  puts opts.help
+  exit
+end
+
+Herald::Command.run(opts)
