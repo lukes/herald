@@ -231,7 +231,7 @@ To make Herald run forever, add this to the end of your script
 
 Use the Herald binary below when you wish to stop your free-spirited heralds.
 
-### Herald binary
+### Herald executable
 
 Print IDs of any running heralds
 
