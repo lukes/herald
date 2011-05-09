@@ -15,6 +15,7 @@ Gem::Specification.new do |s|
 #  s.required_rubygems_version = ">= 1.3.6" # TODO test earliest dependency
   s.add_development_dependency("minitest")
   s.add_dependency("crack")
+  s.add_dependency("slop")
   s.add_dependency("hpricot", ">= 0.8")
   # if gem is being installed on a mac, add a dependency on ruby-growl.
   # note, this is not a fool-proof method of detecting the OS,
@@ -28,7 +29,6 @@ Gem::Specification.new do |s|
 
   s.files         = `git ls-files`.split("\n")
   s.test_files    = `git ls-files -- test/*`.split("\n")
-#  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
-# s.default_executable = "herald"
+  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 end
