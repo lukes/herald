@@ -14,6 +14,7 @@ class Herald
   
   attr_accessor :watchers, :keep_alive, :subprocess
   extend Herald::Batch
+  extend Herald::Daemon
 
   def self.watch(&block)
     new(&block).start
@@ -42,8 +43,10 @@ class Herald
   def self.heralds(obj = nil)
     if !obj.nil? && obj.respond_to?(:to_sym)
       case obj.to_sym
-      when :stopped then return @@heralds.select { |h| !h.alive? }
-      when :alive then return @@heralds.select { |h| h.alive? }
+      when :stopped 
+        return @@heralds.select { |h| !h.alive? }
+      when :alive 
+        return @@heralds.select { |h| h.alive? }
       end
       # if obj is not :stopped or :alive
       raise ArgumentError.new("Unknown parameter #{obj}")
@@ -52,11 +55,10 @@ class Herald
   end
 
   def self.daemonize!
-    lazy_load_module("daemon")
-    extend Herald::Daemon
     @@daemon = true
     serialize_daemons()
     puts "(Herald is now running in the background)\n"
+    self
   end
   
   def self.is_daemon?
@@ -145,6 +147,7 @@ class Herald
       end
       @subprocess = nil # signal unalive state
     end
+    Herald.serialize_daemons
     self # return instance object
   end
 
@@ -153,7 +156,7 @@ class Herald
   # look at GOD
   def stop
     if @subprocess
-      Herald::Daemon.kill(@subprocess)
+      Herald.kill(@subprocess)
     end
     @subprocess = nil
     self
