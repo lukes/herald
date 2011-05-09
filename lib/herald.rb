@@ -14,7 +14,6 @@ class Herald
   
   attr_accessor :watchers, :keep_alive, :subprocess
   extend Herald::Batch
-  extend Herald::Daemon
 
   def self.watch(&block)
     new(&block).start
@@ -53,10 +52,11 @@ class Herald
   end
 
   def self.daemonize!
+    lazy_load_module("daemon")
+    extend Herald::Daemon
     @@daemon = true
     serialize_daemons()
-    $stdout.puts "(Herald is now running in the background)\n"
-    $stdout.flush
+    puts "(Herald is now running in the background)\n"
   end
   
   def self.is_daemon?
