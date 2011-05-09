@@ -6,6 +6,7 @@
 
 * Major Enhancements
   * Added Herald::Daemon, Herald#daemonize! and Herald#kill
+  * Added herald executable
 
 * Minor Enhancements
   * Added Herald#delete, Herald#size, updated Herald#heralds
