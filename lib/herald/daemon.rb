@@ -17,6 +17,8 @@ class Herald
       end
     end
 
+    # returns location of writable .herald.pids file
+    # used to serialize daemons
     def self.pid_file
       @@pid_dir ||= begin
         # select lastest installed herald gem location
@@ -50,10 +52,9 @@ class Herald
       if pids.nil?
         raise ArgumentError.new("Unknown parameter #{obj}")
       end
-      pids.map! { |p| p.to_i }
       pids.each do |pid|
         begin
-          Process.kill("TERM", pid)
+          Process.kill("TERM", pid.to_i)
         # if @subprocess PID does not exist, 
         # this will be due to an error in the subprocess
         # which has terminated it
@@ -65,9 +66,10 @@ class Herald
       self
     end
 
+    # returns serialized daemons in .herald.pids and any unserialized ones
     def running_daemons
       daemons = (heralds.map{ |h| h.subprocess } + serialized_daemons).uniq
-      # whittle out any process that no longer exists
+      # whittle out any process that no longer exist
       daemons.delete_if do |pid|
         begin
           Process.getpgid(pid.to_i)
@@ -88,24 +90,31 @@ class Herald
       File.open(Herald::Daemon.pid_file, 'w') do |f|
         f.write(string)
       end
+      self
     end
 
+    # returns pids from .herald.pids file
     # TODO make this thread safe
     def serialized_daemons
       # open pid_file
       File.open(Herald::Daemon.pid_file, 'r') do |f|
         # read file, and map to an array of integers
-        f.read.split("\n").map { |d| d.to_i }
+        f.read.split("\n").map do |d| 
+          next unless d.match(/^\d+\Z/)
+          d.to_i
+        end.compact
       end
     end
     
     # deletes given pids from file
     def delete_daemons(pids)
+      pids.map! { |pid| pid.to_i }
       lines = File.readlines(Herald::Daemon.pid_file)
       lines.delete_if { |line| pids.include?(line.to_i) }
       File.open(Herald::Daemon.pid_file, 'w') do |f|
         f.write(lines)
       end
+      self
     end
     
   end
