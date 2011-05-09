@@ -1,5 +1,9 @@
 === HEAD (unreleased as a gem)
 
+* None
+
+=== 0.3 / 2011-05-09
+
 * Major Enhancements
   * Added Herald::Daemon, Herald#daemonize! and Herald#kill
 
