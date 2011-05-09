@@ -8,7 +8,7 @@ describe Herald do
   after do
     Herald.clear
   end
-  
+
   describe "initialisation with watchers" do
     it "must throw an acception if no 'check' param is given" do
       assert_raises(RuntimeError) do
@@ -123,5 +123,30 @@ describe Herald do
     
   end
 
+  describe "Must allow running as a daemon, with methods to control processes" do
+    it "must determine a location to write the pid file to" do
+      Herald::Daemon.pid_file.must_match(/\.herald\.pids\Z/)
+      File.writable?(Herald::Daemon.pid_file).must_equal(true)
+    end
+    it "must allow Herald to be daemonized" do
+      Herald.is_daemon?.must_equal(false)      
+      Herald.daemonize!.must_equal(Herald)
+      Herald.is_daemon?.must_equal(true)
+    end
+    it "must keep track of running heralds" do
+      Herald.running_daemons.size.must_equal(1)
+      Herald.watch_twitter { _for "test" }
+      Herald.running_daemons.size.must_equal(2)
+    end
+    it "Herald:#clear must delete all processes" do
+      Herald.clear.must_equal(Herald)
+      Herald.running_daemons.size.must_equal(0)
+    end
+    it "must allow you to delete pids" do
+      Herald.serialized_daemons.size.must_equal(1)
+      Herald.delete_daemons(Herald.running_daemons).must_equal(Herald)
+      Herald.serialized_daemons.size.must_equal(0)
+    end
+  end
   
 end
