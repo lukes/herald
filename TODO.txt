@@ -6,6 +6,4 @@
 
 - Custom Error classes
 
-- Serialize heralds in Herald::Daemon as YAML herald.to_s: pid
-
 - Add support for linux and windows versions of growl
