@@ -7,7 +7,7 @@ class Herald
     #
 
     # TODO turn this into pid_file and initialize on extended
-    @@pid_dir = nil
+    @@pid_file = nil
 
     def self.extended(base)
       unless File.exists?(pid_file)
@@ -20,30 +20,31 @@ class Herald
     # returns location of writable .herald.pids file
     # used to serialize daemons
     def self.pid_file
-      @@pid_dir ||= begin
-        # select lastest installed herald gem location
-        if herald_gem_dir = Dir["#{Gem.dir}/gems/herald*"].last
-          "#{herald_gem_dir}/"
-        else
-          ""
-        end
+      unless @@pid_file.nil?
+        return @@pid_file
       end
-      "#{@@pid_dir}.herald.pids"
+      # select lastest installed herald gem location
+      dir = if herald_gem_dir = Dir["#{Gem.dir}/gems/herald*"].last
+        "#{herald_gem_dir}/"
+      else
+        ""
+      end
+      @@pid_dir = "#{dir}.herald.pids"      
     end
 
     #
     # mixin methods:
     #
 
-    # kill can be passed :all, a pid, an array of pids, or a herald
+    # kill can be passed :all, a pid, or a herald
+    # kill is destructive in that it won't call
+    # herald.stop before terminating its process.
     def kill(obj)
       pids = case
       when obj == :all
-        serialized_daemons
-      when obj.is_a?(String) || obj.is_a?(Fixnum)
+        deserialize_daemons
+      when obj.is_a?(Fixnum)
         Array(obj)
-      when obj.is_a?(Array)
-        obj
       when obj.is_a?(Herald)
         Array(obj.subprocess)
       else
@@ -68,11 +69,17 @@ class Herald
 
     # returns serialized daemons in .herald.pids and any unserialized ones
     def running_daemons
-      daemons = (heralds.map{ |h| h.subprocess } + serialized_daemons).uniq
+      # map all running daemons
+      # to an array of { pid => herald_as_string }
+      daemons = deserialize_daemons
+      daemons += heralds.map do |h| 
+        { h.subprocess => h.to_s } 
+      end
+      daemons.uniq!
       # whittle out any process that no longer exist
-      daemons.delete_if do |pid|
+      daemons.delete_if do |d|
         begin
-          Process.getpgid(pid.to_i)
+          Process.getpgid(d.keys.first)
           false
         rescue Errno::ESRCH => e
           true
@@ -82,37 +89,29 @@ class Herald
 
     # will serialize all daemons (running in this Ruby session
     # plus any existing ones in the file). 
-    # optionally can be passed a list of pids, in which case
-    # only these will be serialize
-    def serialize_daemons(daemons = nil)
+    def serialize_daemons
       # write file, truncating existing file to zero length
-      string = running_daemons.join("\n")
       File.open(Herald::Daemon.pid_file, 'w') do |f|
-        f.write(string)
+        f.write(running_daemons.to_yaml)
       end
       self
     end
 
     # returns pids from .herald.pids file
     # TODO make this thread safe
-    def serialized_daemons
-      # open pid_file
-      File.open(Herald::Daemon.pid_file, 'r') do |f|
-        # read file, and map to an array of integers
-        f.read.split("\n").map do |d| 
-          next unless d.match(/^\d+\Z/)
-          d.to_i
-        end.compact
-      end
+    def deserialize_daemons
+      YAML::load(File.read(Herald::Daemon.pid_file)) || []
     end
     
     # deletes given pids from file
     def delete_daemons(pids)
-      pids.map! { |pid| pid.to_i }
-      lines = File.readlines(Herald::Daemon.pid_file)
-      lines.delete_if { |line| pids.include?(line.to_i) }
+      pids = Array(pids)
+      daemons = deserialize_daemons
+      daemons.delete_if do |d|
+        pids.include?(d.keys.first.to_i)
+      end
       File.open(Herald::Daemon.pid_file, 'w') do |f|
-        f.write(lines)
+        f.write(daemons.to_yaml)
       end
       self
     end
