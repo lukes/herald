@@ -7,6 +7,8 @@ require 'herald/item'
 require 'herald/batch'
 require 'herald/daemon'
 
+require 'yaml'
+
 class Herald
 
   @@heralds = []
@@ -95,7 +97,7 @@ class Herald
   end
 
   # send instructions to Watchers
-  def action(type = nil, options = {}, &block)
+  def action(type = :callback, options = {}, &block)
     @watchers.each do |watcher|
       watcher.action(type, options, &block)
     end
@@ -171,6 +173,10 @@ class Herald
   
   def alive?
     !!@subprocess
+  end
+  
+  def to_s
+    "Watchers: #{@watchers}, Notifiers: #{@watchers.map{|w| w.notifiers }.flatten}, State: #{@subprocess ? 'Alive' : 'Stopped'}"
   end
     
 private
