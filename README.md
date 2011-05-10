@@ -238,8 +238,8 @@ Use the Herald executable below when you wish to stop your free-spirited heralds
 
 Print IDs of any running heralds
 
-    sudo herald --show-heralds
+    herald --show-heralds
     
 Pass the ID to the `kill` command to stop it running
     
-    sudo herald --kill 1
+    herald --kill 1
