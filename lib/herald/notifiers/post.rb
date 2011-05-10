@@ -51,6 +51,10 @@ class Herald
             Net::HTTP.post_form(uri, { "title" => item.title, "message" => item.message }.merge(item.data))
           end
         end
+        
+        def to_s
+          "Herald Post Notifier, URIs: #{@uris}"
+        end
 
       end
 

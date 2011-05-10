@@ -21,6 +21,10 @@ class Herald
           end
         end
 
+        def to_s
+          "Herald Callback Notifier"
+        end
+        
       end
 
     end

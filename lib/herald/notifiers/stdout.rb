@@ -19,6 +19,10 @@ class Herald
           $stdout.puts item.data.inspect
           $stdout.flush
         end
+        
+        def to_s
+          "Herald Stdout Notifier"
+        end
 
       end
 

@@ -10,16 +10,20 @@ class Herald
         def self.extended(base)
           Herald::lazy_load_module("notifiers/post")
           base.send(:extend, Post)
-          # and redefine notify() to ping instead of post data
           class << base
+            # redefine notify() to ping instead of post data
             def notify(item)
               @uris.each do |uri| 
                 Net::HTTP.new(uri.host).head('/')
               end
+              # redefine to_s
+              def to_s
+                "Herald Ping Notifier, URIs: #{@uris}"
+              end
             end
           end # end
         end # end method
-
+        
       end # end module
 
     end

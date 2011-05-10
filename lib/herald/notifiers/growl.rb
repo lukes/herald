@@ -34,6 +34,10 @@ class Herald
           end
         end
 
+        def to_s
+          "Herald Growl Notifier"
+        end
+        
       end
 
     end
