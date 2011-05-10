@@ -7,3 +7,5 @@
 - Custom Error classes
 
 - Add support for linux and windows versions of growl
+
+- Making writing to .pids file threadsafe
