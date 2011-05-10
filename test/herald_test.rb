@@ -133,11 +133,11 @@ describe Herald do
       Herald.daemonize!.must_equal(Herald)
       Herald.is_daemon?.must_equal(true)
     end
-    it "must serialize running heralds to an array of hashes" do
-      Herald.deserialize_daemons.must_be_kind_of(Array)
-      Herald.deserialize_daemons.first.must_be_kind_of(Hash)
-      Herald.deserialize_daemons.first.keys.first.must_equal(@herald.subprocess)
-      Herald.deserialize_daemons.first.values.first.must_equal(@herald.to_s)
+    it "must serialize running heralds to a YAML file of hashes" do
+      Herald.deserialize_daemons.must_be_kind_of(Hash)
+      Herald.deserialize_daemons.size.must_equal(1)
+      Herald.deserialize_daemons.keys.first.must_equal(@herald.subprocess)
+      Herald.deserialize_daemons.values.first.must_equal(@herald.to_s)
     end
     it "must keep track of running heralds" do
       Herald.running_daemons.size.must_equal(1)
@@ -154,12 +154,10 @@ describe Herald do
       Herald.deserialize_daemons.size.must_equal(0)
     end
     it "must allow you to kill Heralds by passing a herald" do
-      Herald.deserialize_daemons.size.must_equal(1)
       Herald.kill(@herald).must_equal(Herald)
       Herald.deserialize_daemons.size.must_equal(0)
     end
     it "must allow you to kill Heralds by passing a pid" do
-      Herald.deserialize_daemons.size.must_equal(1)
       Herald.kill(@herald.subprocess).must_equal(Herald)
       Herald.deserialize_daemons.size.must_equal(0)
     end

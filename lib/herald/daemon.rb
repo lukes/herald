@@ -70,16 +70,18 @@ class Herald
     # returns serialized daemons in .herald.pids and any unserialized ones
     def running_daemons
       # map all running daemons
-      # to an array of { pid => herald_as_string }
+      # to a hash of { pid => herald_as_string }    
       daemons = deserialize_daemons
-      daemons += heralds.map do |h| 
-        { h.subprocess => h.to_s } 
+      # add all running heralds
+      heralds.each do |h|
+        unless daemons.keys.include?(h.subprocess)
+          daemons[h.subprocess] = h.to_s
+        end
       end
-      daemons.uniq!
       # whittle out any process that no longer exist
-      daemons.delete_if do |d|
+      daemons.delete_if do |pid, herald|
         begin
-          Process.getpgid(d.keys.first)
+          Process.getpgid(pid)
           false
         rescue Errno::ESRCH => e
           true
@@ -100,15 +102,15 @@ class Herald
     # returns pids from .herald.pids file
     # TODO make this thread safe
     def deserialize_daemons
-      YAML::load(File.read(Herald::Daemon.pid_file)) || []
+      YAML::load(File.read(Herald::Daemon.pid_file)) || Hash.new
     end
     
     # deletes given pids from file
     def delete_daemons(pids)
       pids = Array(pids)
       daemons = deserialize_daemons
-      daemons.delete_if do |d|
-        pids.include?(d.keys.first.to_i)
+      daemons.delete_if do |pid, herald|
+        pids.include?(pid)
       end
       File.open(Herald::Daemon.pid_file, 'w') do |f|
         f.write(daemons.to_yaml)
